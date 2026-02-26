@@ -1,5 +1,5 @@
 import { Link, useNavigate, useRouterState } from '@tanstack/react-router'
-import { LayoutDashboard, LogOut } from 'lucide-react'
+import { BookOpen, LayoutDashboard, LogOut } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -22,6 +22,12 @@ const items = {
       title: 'Dashboard',
       url: '/app/dashboard',
       icon: LayoutDashboard,
+      disabled: false,
+    },
+    {
+      title: 'Exercises',
+      url: '/app/exercises',
+      icon: BookOpen,
       disabled: false,
     },
   ],

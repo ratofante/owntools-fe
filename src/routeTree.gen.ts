@@ -8,12 +8,16 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PublicRouteImport } from './routes/_public'
 import { Route as AppRouteRouteImport } from './routes/app/route'
 import { Route as PublicIndexRouteImport } from './routes/_public.index'
 import { Route as AppDashboardRouteImport } from './routes/app/dashboard'
 import { Route as PublicLoginRouteImport } from './routes/_public.login'
+
+const AppExercisesLazyRouteImport = createFileRoute('/app/exercises')()
 
 const PublicRoute = PublicRouteImport.update({
   id: '/_public',
@@ -29,6 +33,11 @@ const PublicIndexRoute = PublicIndexRouteImport.update({
   path: '/',
   getParentRoute: () => PublicRoute,
 } as any)
+const AppExercisesLazyRoute = AppExercisesLazyRouteImport.update({
+  id: '/exercises',
+  path: '/exercises',
+  getParentRoute: () => AppRouteRoute,
+} as any).lazy(() => import('./routes/app/exercises.lazy').then((d) => d.Route))
 const AppDashboardRoute = AppDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -45,11 +54,13 @@ export interface FileRoutesByFullPath {
   '/': typeof PublicIndexRoute
   '/login': typeof PublicLoginRoute
   '/app/dashboard': typeof AppDashboardRoute
+  '/app/exercises': typeof AppExercisesLazyRoute
 }
 export interface FileRoutesByTo {
   '/app': typeof AppRouteRouteWithChildren
   '/login': typeof PublicLoginRoute
   '/app/dashboard': typeof AppDashboardRoute
+  '/app/exercises': typeof AppExercisesLazyRoute
   '/': typeof PublicIndexRoute
 }
 export interface FileRoutesById {
@@ -58,19 +69,21 @@ export interface FileRoutesById {
   '/_public': typeof PublicRouteWithChildren
   '/_public/login': typeof PublicLoginRoute
   '/app/dashboard': typeof AppDashboardRoute
+  '/app/exercises': typeof AppExercisesLazyRoute
   '/_public/': typeof PublicIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/app' | '/' | '/login' | '/app/dashboard'
+  fullPaths: '/app' | '/' | '/login' | '/app/dashboard' | '/app/exercises'
   fileRoutesByTo: FileRoutesByTo
-  to: '/app' | '/login' | '/app/dashboard' | '/'
+  to: '/app' | '/login' | '/app/dashboard' | '/app/exercises' | '/'
   id:
     | '__root__'
     | '/app'
     | '/_public'
     | '/_public/login'
     | '/app/dashboard'
+    | '/app/exercises'
     | '/_public/'
   fileRoutesById: FileRoutesById
 }
@@ -102,6 +115,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicIndexRouteImport
       parentRoute: typeof PublicRoute
     }
+    '/app/exercises': {
+      id: '/app/exercises'
+      path: '/exercises'
+      fullPath: '/app/exercises'
+      preLoaderRoute: typeof AppExercisesLazyRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/app/dashboard': {
       id: '/app/dashboard'
       path: '/dashboard'
@@ -121,10 +141,12 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
+  AppExercisesLazyRoute: typeof AppExercisesLazyRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
+  AppExercisesLazyRoute: AppExercisesLazyRoute,
 }
 
 const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
