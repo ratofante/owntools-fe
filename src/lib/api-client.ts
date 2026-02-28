@@ -29,7 +29,7 @@ export async function apiFetch(
   let authHeader: Record<string, string> | undefined
 
   if (!skipAuth) {
-    authHeader = useAuth.getState().getAuthHeader() ?? undefined
+    authHeader = useAuth.getState().getAuthHeader()
   }
 
   if (authHeader?.Authorization) {

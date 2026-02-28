@@ -1,30 +1,31 @@
-import type { PaginationMetaData } from '@/types/pagination-meta-data'
-import type { Exercise } from '@/types/exercise'
 import { useQuery } from '@tanstack/react-query'
+import type { Exercise } from '@/types/exercise'
+import type { PaginationMeta } from '@/types/pagination-meta'
 import { apiFetch } from '@/lib/api-client'
 
 export interface GetExercisesOptions {
   page: number
   limit: number
+  search: string
 }
 
 export interface GetExercisesResponse {
-  meta: PaginationMetaData
-  data: Exercise[]
+  meta: PaginationMeta
+  data: Array<Exercise>
 }
 
-export const useGetExercises = (options: GetExercisesOptions) => {
+export const useGetExercises = (payload: GetExercisesOptions) => {
   return useQuery({
-    queryKey: ['exercises', options.page, options.limit],
-    queryFn: async () => getExercises(options),
+    queryKey: ['expenses', payload.page, payload.limit, payload.search],
+    queryFn: () => getExercises(payload),
     staleTime: 1000 * 60 * 5,
   })
 }
 
-async function getExercises(options: GetExercisesOptions) {
+async function getExercises(payload: GetExercisesOptions) {
   try {
-    const res = await apiFetch(
-      `/exercises?page=${options.page}&limit=${options.limit}`,
+    const response = await apiFetch(
+      `/exercises?page=${payload.page}&limit=${payload.limit}&searchName=${payload.search}`,
       {
         method: 'GET',
         headers: {
@@ -33,13 +34,14 @@ async function getExercises(options: GetExercisesOptions) {
       },
     )
 
-    if (!res.ok) {
-      throw new Error('Failed to fetch exercises')
+    if (!response.ok) {
+      throw new Error('Failed to get expenses')
     }
 
-    const data = await res.json()
+    const data = await response.json()
     return data as GetExercisesResponse
   } catch (error) {
-    throw new Error('Failed to fetch exercises')
+    console.error('Error getting expenses: ', error)
+    throw error
   }
 }

@@ -2,6 +2,9 @@ import { Link, Outlet, createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_public')({
   component: RouteComponent,
+  beforeLoad: ({ search }) => {
+    console.log('search', search)
+  },
 })
 
 function RouteComponent() {

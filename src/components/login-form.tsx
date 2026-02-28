@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { useAuth } from '@/hooks/use-auth'
 import {
   Field,
   FieldError,
@@ -18,15 +19,9 @@ import {
   FieldLabel,
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
-import { useAuth } from '@/hooks/use-auth'
-
-/**
- * TO DO:
- * - Check how to validate each field onBlur individually
- */
 
 const loginSchema = z.object({
-  email: z.string().email('Invalid email address'),
+  email: z.email('Invalid email address'),
   password: z.string().min(1, 'Password is required'),
 })
 
@@ -34,7 +29,7 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<'div'>) {
-  const { login } = useAuth()
+  const auth = useAuth()
   const navigate = useNavigate({ from: '/login' })
   const form = useForm({
     defaultValues: {
@@ -43,16 +38,23 @@ export function LoginForm({
     },
     validators: {
       onSubmit: loginSchema,
+      onBlur: loginSchema,
     },
     onSubmit: async ({ value }) => {
-      console.log(value, form.state)
-      await login(value.email, value.password)
+      console.log(value)
+      console.log(form.state)
+      await auth.login(value.email, value.password)
       navigate({ to: '/app/dashboard' })
     },
   })
 
+  console.log(form.state.isValid, form.state.canSubmit)
+
   return (
-    <div className={cn('flex flex-col gap-6', className)} {...props}>
+    <div
+      className={cn('flex flex-col gap-6 flex-1 max-w-md', className)}
+      {...props}
+    >
       <Card>
         <CardHeader>
           <CardTitle>Login to your account</CardTitle>
@@ -84,8 +86,9 @@ export function LoginForm({
                         onBlur={field.handleBlur}
                         onChange={(e) => field.handleChange(e.target.value)}
                         aria-invalid={isInvalid}
-                        placeholder="mail@example.com"
-                        autoComplete="email"
+                        type="email"
+                        placeholder="mail@domain.com"
+                        autoComplete="off"
                         required
                       />
                       <FieldError errors={field.state.meta.errors} />
@@ -96,10 +99,10 @@ export function LoginForm({
               <form.Field
                 name="password"
                 children={(field) => {
-                  const isIvalid =
+                  const isInvalid =
                     field.state.meta.isTouched && !field.state.meta.isValid
                   return (
-                    <Field data-invalid={isIvalid}>
+                    <Field data-invalid={isInvalid}>
                       <FieldLabel htmlFor={field.name}>Password</FieldLabel>
                       <Input
                         id={field.name}
@@ -107,10 +110,10 @@ export function LoginForm({
                         value={field.state.value}
                         onBlur={field.handleBlur}
                         onChange={(e) => field.handleChange(e.target.value)}
-                        aria-invalid={isIvalid}
+                        aria-invalid={isInvalid}
                         type="password"
                         placeholder="********"
-                        autoComplete="current-password"
+                        autoComplete="off"
                         required
                       />
                       <FieldError errors={field.state.meta.errors} />
@@ -118,20 +121,15 @@ export function LoginForm({
                   )
                 }}
               />
+              <form.Subscribe
+                selector={(state) => [state.canSubmit, state.isSubmitting]}
+                children={([canSubmit, isSubmitting]) => (
+                  <Button type="submit" disabled={!canSubmit}>
+                    {isSubmitting ? 'Logging in...' : 'Login'}
+                  </Button>
+                )}
+              />
             </FieldGroup>
-            <form.Subscribe
-              selector={(state) => [state.canSubmit, state.isSubmitting]}
-              children={([canSubmit, isSubmitting]) => (
-                <Button
-                  type="submit"
-                  disabled={!canSubmit}
-                  size="lg"
-                  className="w-full mt-8"
-                >
-                  {isSubmitting ? 'Logging in...' : 'Login'}
-                </Button>
-              )}
-            />
           </form>
         </CardContent>
       </Card>

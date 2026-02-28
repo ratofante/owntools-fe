@@ -16,6 +16,7 @@ import { Route as AppRouteRouteImport } from './routes/app/route'
 import { Route as PublicIndexRouteImport } from './routes/_public.index'
 import { Route as AppDashboardRouteImport } from './routes/app/dashboard'
 import { Route as PublicLoginRouteImport } from './routes/_public.login'
+import { Route as AppWalletsCreateRouteImport } from './routes/app/wallets/create'
 
 const AppExercisesLazyRouteImport = createFileRoute('/app/exercises')()
 
@@ -48,13 +49,19 @@ const PublicLoginRoute = PublicLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => PublicRoute,
 } as any)
+const AppWalletsCreateRoute = AppWalletsCreateRouteImport.update({
+  id: '/wallets/create',
+  path: '/wallets/create',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/app': typeof AppRouteRouteWithChildren
-  '/': typeof PublicIndexRoute
   '/login': typeof PublicLoginRoute
   '/app/dashboard': typeof AppDashboardRoute
   '/app/exercises': typeof AppExercisesLazyRoute
+  '/': typeof PublicIndexRoute
+  '/app/wallets/create': typeof AppWalletsCreateRoute
 }
 export interface FileRoutesByTo {
   '/app': typeof AppRouteRouteWithChildren
@@ -62,6 +69,7 @@ export interface FileRoutesByTo {
   '/app/dashboard': typeof AppDashboardRoute
   '/app/exercises': typeof AppExercisesLazyRoute
   '/': typeof PublicIndexRoute
+  '/app/wallets/create': typeof AppWalletsCreateRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,12 +79,25 @@ export interface FileRoutesById {
   '/app/dashboard': typeof AppDashboardRoute
   '/app/exercises': typeof AppExercisesLazyRoute
   '/_public/': typeof PublicIndexRoute
+  '/app/wallets/create': typeof AppWalletsCreateRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/app' | '/' | '/login' | '/app/dashboard' | '/app/exercises'
+  fullPaths:
+    | '/app'
+    | '/login'
+    | '/app/dashboard'
+    | '/app/exercises'
+    | '/'
+    | '/app/wallets/create'
   fileRoutesByTo: FileRoutesByTo
-  to: '/app' | '/login' | '/app/dashboard' | '/app/exercises' | '/'
+  to:
+    | '/app'
+    | '/login'
+    | '/app/dashboard'
+    | '/app/exercises'
+    | '/'
+    | '/app/wallets/create'
   id:
     | '__root__'
     | '/app'
@@ -85,6 +106,7 @@ export interface FileRouteTypes {
     | '/app/dashboard'
     | '/app/exercises'
     | '/_public/'
+    | '/app/wallets/create'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -97,7 +119,7 @@ declare module '@tanstack/react-router' {
     '/_public': {
       id: '/_public'
       path: ''
-      fullPath: '/'
+      fullPath: ''
       preLoaderRoute: typeof PublicRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -136,17 +158,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicLoginRouteImport
       parentRoute: typeof PublicRoute
     }
+    '/app/wallets/create': {
+      id: '/app/wallets/create'
+      path: '/wallets/create'
+      fullPath: '/app/wallets/create'
+      preLoaderRoute: typeof AppWalletsCreateRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
   }
 }
 
 interface AppRouteRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
   AppExercisesLazyRoute: typeof AppExercisesLazyRoute
+  AppWalletsCreateRoute: typeof AppWalletsCreateRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
   AppExercisesLazyRoute: AppExercisesLazyRoute,
+  AppWalletsCreateRoute: AppWalletsCreateRoute,
 }
 
 const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
@@ -173,12 +204,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}

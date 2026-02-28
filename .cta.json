@@ -1,17 +1,12 @@
 {
-  "projectName": "owntools-fe",
+  "projectName": "quicksplit",
   "mode": "file-router",
   "typescript": true,
-  "packageManager": "npm",
-  "includeExamples": true,
   "tailwind": true,
+  "packageManager": "npm",
   "addOnOptions": {},
-  "envVarValues": {},
   "git": true,
-  "routerOnly": false,
   "version": 1,
   "framework": "react-cra",
-  "chosenAddOns": [
-    "eslint"
-  ]
+  "chosenAddOns": ["eslint", "tanstack-query", "t3env", "shadcn"]
 }

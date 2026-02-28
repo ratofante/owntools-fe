@@ -1,5 +1,5 @@
 import { Link, useNavigate, useRouterState } from '@tanstack/react-router'
-import { BookOpen, LayoutDashboard, LogOut } from 'lucide-react'
+import { Dumbbell, LayoutDashboard, LogOut } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -27,7 +27,7 @@ const items = {
     {
       title: 'Exercises',
       url: '/app/exercises',
-      icon: BookOpen,
+      icon: Dumbbell,
       disabled: false,
     },
   ],
@@ -38,7 +38,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const navigate = useNavigate()
   const routerState = useRouterState()
   const currentPath = routerState.location.pathname
-  console.log(currentPath)
 
   function handleLogout() {
     auth.logout()
@@ -78,7 +77,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
       <SidebarFooter>
         <div>User</div>
-        <Button variant="ghost" onClick={handleLogout}>
+        <Button variant="outline" onClick={handleLogout}>
           <LogOut />
           Logout
         </Button>
