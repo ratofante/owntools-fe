@@ -1,64 +1,16 @@
 import { createLazyFileRoute } from '@tanstack/react-router'
-import { format } from 'date-fns'
-import {
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from '@tanstack/react-table'
 import { SearchIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import type { Exercise } from '@/types/exercise'
-import type { ColumnDef } from '@tanstack/react-table'
 import { useGetExercises } from '@/hooks/use-get-exercises'
 import { Pagination } from '@/components/pagination'
 import { useExercisesTable } from '@/hooks/use-exercises-table'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
+import { ExerciseTable } from '@/components/exercises/exercises-table'
 import { Input } from '@/components/ui/input'
 import { useDebounce } from '@/hooks/use-debounce'
 
 export const Route = createLazyFileRoute('/app/exercises')({
   component: RouteComponent,
 })
-
-const exerciseColumns: Array<ColumnDef<Exercise>> = [
-  {
-    accessorKey: 'name',
-    header: 'Name',
-    cell: ({ row }) => {
-      return <div className="min-w-12 max-w-20">{row.original.name}</div>
-    },
-  },
-  {
-    accessorKey: 'description',
-    header: 'Description',
-    cell: ({ row }) => {
-      return (
-        <div className="text-wrap max-w-xs line-clamp-2 text-xs">
-          {row.original.description}
-        </div>
-      )
-    },
-  },
-  {
-    accessorKey: 'createdAt',
-    header: () => <div className="text-right">Created At</div>,
-    cell: ({ row }) => {
-      return (
-        <div className="uppercase text-right text-xs text-muted-foreground">
-          {format(new Date(row.original.createdAt), 'dd/MM/yyyy')}
-        </div>
-      )
-    },
-  },
-]
 
 function RouteComponent() {
   const [search, setSearch] = useState<string>('')
@@ -70,11 +22,7 @@ function RouteComponent() {
     search: searchName,
   })
   const exercises = data?.data || []
-  const table = useReactTable({
-    data: exercises,
-    columns: exerciseColumns,
-    getCoreRowModel: getCoreRowModel(),
-  })
+  console.log(exercises)
 
   const debouncedSearchName = useDebounce(search, 500)
 
@@ -107,64 +55,7 @@ function RouteComponent() {
             onLimitChange={(newLimit) => setLimit(newLimit)}
           />
         </div>
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
-                    </TableHead>
-                  )
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {isLoading ? (
-              <TableRow>
-                <TableCell
-                  colSpan={exerciseColumns.length}
-                  className="h-24 text-center"
-                >
-                  Loading...
-                </TableCell>
-              </TableRow>
-            ) : table.getRowModel().rows.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={exerciseColumns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-          <TableFooter></TableFooter>
-        </Table>
+        <ExerciseTable exercises={exercises} isLoading={isLoading} />
       </div>
     </div>
   )
