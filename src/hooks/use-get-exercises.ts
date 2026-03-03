@@ -7,6 +7,7 @@ export interface GetExercisesOptions {
   page: number
   limit: number
   search: string
+  bodyZones: Array<string>
 }
 
 export interface GetExercisesResponse {
@@ -16,7 +17,13 @@ export interface GetExercisesResponse {
 
 export const useGetExercises = (payload: GetExercisesOptions) => {
   return useQuery({
-    queryKey: ['expenses', payload.page, payload.limit, payload.search],
+    queryKey: [
+      'expenses',
+      payload.page,
+      payload.limit,
+      payload.search,
+      payload.bodyZones,
+    ],
     queryFn: () => getExercises(payload),
     staleTime: 1000 * 60 * 5,
   })
@@ -25,7 +32,7 @@ export const useGetExercises = (payload: GetExercisesOptions) => {
 async function getExercises(payload: GetExercisesOptions) {
   try {
     const response = await apiFetch(
-      `/exercises?page=${payload.page}&limit=${payload.limit}&searchName=${payload.search}`,
+      `/exercises?page=${payload.page}&limit=${payload.limit}&searchName=${payload.search}${payload.bodyZones.length ? `&bodyZones=${payload.bodyZones.join(',')}` : ''}`,
       {
         method: 'GET',
         headers: {
