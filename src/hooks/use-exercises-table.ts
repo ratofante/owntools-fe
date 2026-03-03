@@ -9,6 +9,8 @@ interface ExercisesTableState {
   setSearchName: (searchName: string) => void
   bodyZones: Array<string>
   setBodyZones: (bodyZones: Array<string>) => void
+  muscleGroups: Array<string>
+  setMuscleGroups: (muscleGroups: Array<string>) => void
   hasFilters: () => boolean
   clearFilters: () => void
 }
@@ -22,10 +24,16 @@ export const useExercisesTable = create<ExercisesTableState>((set, get) => ({
   setSearchName: (searchName) => set({ searchName }),
   bodyZones: [],
   setBodyZones: (bodyZones) => set({ bodyZones }),
+  muscleGroups: [],
+  setMuscleGroups: (muscleGroups) => set({ muscleGroups }),
   hasFilters: () => {
-    return get().searchName !== '' || get().bodyZones.length > 0
+    return (
+      get().searchName !== '' ||
+      get().bodyZones.length > 0 ||
+      get().muscleGroups.length > 0
+    )
   },
   clearFilters: () => {
-    set({ searchName: '', bodyZones: [], page: 1 })
+    set({ searchName: '', bodyZones: [], muscleGroups: [], page: 1 })
   },
 }))

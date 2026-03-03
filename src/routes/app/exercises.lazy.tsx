@@ -8,6 +8,7 @@ import { useExercisesTable } from '@/hooks/use-exercises-table'
 import { ExerciseTable } from '@/components/exercises/exercises-table'
 import { Input } from '@/components/ui/input'
 import { BodyZonesMultipleSelect } from '@/components/body-zones/body-zones-multiple-select'
+import { MuscleGroupsMultipleSelect } from '@/components/muscle-groups/muscle-groups-multiple-select'
 import { Button } from '@/components/ui/button'
 
 export const Route = createLazyFileRoute('/app/exercises')({
@@ -25,6 +26,8 @@ function RouteComponent() {
     setSearchName,
     bodyZones,
     setBodyZones,
+    muscleGroups,
+    setMuscleGroups,
     hasFilters,
     clearFilters,
   } = useExercisesTable()
@@ -33,6 +36,7 @@ function RouteComponent() {
     limit: limit,
     search: searchName,
     bodyZones: bodyZones,
+    muscleGroups: muscleGroups,
   })
   const exercises = data?.data || []
 
@@ -47,8 +51,13 @@ function RouteComponent() {
     setBodyZones(values)
   }
 
+  function handleMuscleGroupsChange(values: Array<string>) {
+    console.log(values)
+    setMuscleGroups(values)
+  }
+
   return (
-    <div className="flex-1 flex flex-col">
+    <div className="flex-1 flex flex-col @container">
       <h1 className="text-2xl font-bold">Exercises</h1>
       <div className="flex-1">
         <div className="flex items-center gap-2">
@@ -63,6 +72,11 @@ function RouteComponent() {
             values={bodyZones}
             onValuesChange={handleBodyZonesChange}
           />
+          <MuscleGroupsMultipleSelect
+            className="max-w-3xs"
+            values={muscleGroups}
+            onValuesChange={handleMuscleGroupsChange}
+          />
           <Button
             variant="outline"
             size="icon"
@@ -72,7 +86,7 @@ function RouteComponent() {
             <FunnelX className="w-4 h-4" />
           </Button>
           <Pagination
-            className="ml-auto"
+            className=" ml-auto @max-lg:absolute @max-lg:bottom-0 @max-lg:left-0 @max-lg:right-0 @max-lg:w-full"
             currentPage={data?.meta.currentPage || 1}
             limit={limit}
             limitOptions={[10, 20, 50]}

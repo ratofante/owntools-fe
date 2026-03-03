@@ -11,7 +11,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -138,7 +137,7 @@ export function ExerciseTable({
           <TableRow key={headerGroup.id}>
             {headerGroup.headers.map((header) => {
               return (
-                <TableHead key={header.id}>
+                <TableHead key={header.id} className="font-semibold">
                   {header.isPlaceholder
                     ? null
                     : flexRender(
@@ -185,7 +184,6 @@ export function ExerciseTable({
           </TableRow>
         )}
       </TableBody>
-      <TableFooter></TableFooter>
     </Table>
   )
 }

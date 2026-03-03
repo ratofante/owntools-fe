@@ -8,6 +8,7 @@ export interface GetExercisesOptions {
   limit: number
   search: string
   bodyZones: Array<string>
+  muscleGroups: Array<string>
 }
 
 export interface GetExercisesResponse {
@@ -23,6 +24,7 @@ export const useGetExercises = (payload: GetExercisesOptions) => {
       payload.limit,
       payload.search,
       payload.bodyZones,
+      payload.muscleGroups,
     ],
     queryFn: () => getExercises(payload),
     staleTime: 1000 * 60 * 5,
@@ -32,7 +34,7 @@ export const useGetExercises = (payload: GetExercisesOptions) => {
 async function getExercises(payload: GetExercisesOptions) {
   try {
     const response = await apiFetch(
-      `/exercises?page=${payload.page}&limit=${payload.limit}&searchName=${payload.search}${payload.bodyZones.length ? `&bodyZones=${payload.bodyZones.join(',')}` : ''}`,
+      `/exercises?page=${payload.page}&limit=${payload.limit}&searchName=${payload.search}${payload.bodyZones.length ? `&bodyZones=${payload.bodyZones.join(',')}` : ''}${payload.muscleGroups.length ? `&muscleGroups=${payload.muscleGroups.join(',')}` : ''}`,
       {
         method: 'GET',
         headers: {

@@ -37,26 +37,9 @@ export function Pagination({
     <div
       className={cn('flex items-center justify-end space-x-2 py-4', className)}
     >
-      <div className="text-sm text-muted-foreground">
+      <div className="text-sm text-muted-foreground text-nowrap">
         {currentPage} of {totalPages}
       </div>
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={onPrevious}
-        disabled={currentPage === 1}
-      >
-        <ChevronLeftIcon className="w-4 h-4" />
-      </Button>
-
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={onNext}
-        disabled={currentPage === lastPage}
-      >
-        <ChevronRightIcon className="w-4 h-4" />
-      </Button>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="sm">
@@ -76,6 +59,23 @@ export function Pagination({
           ))}
         </DropdownMenuContent>
       </DropdownMenu>
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={onPrevious}
+        disabled={currentPage === 1}
+      >
+        <ChevronLeftIcon className="w-4 h-4" />
+      </Button>
+
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={onNext}
+        disabled={currentPage === lastPage}
+      >
+        <ChevronRightIcon className="w-4 h-4" />
+      </Button>
     </div>
   )
 }
