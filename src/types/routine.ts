@@ -1,4 +1,20 @@
 import { z } from 'zod'
+import type React from 'react'
+
+export const workoutTypeEnum = z.enum([
+  'straight_set',
+  'timed_set',
+  'emom',
+  'hiit',
+])
+export type WorkoutType = z.infer<typeof workoutTypeEnum>
+
+export type WorkoutTypeOption = {
+  type: WorkoutType
+  label: string
+  description: string
+  icon: React.ComponentType<{ className?: string }>
+}
 
 const SetExerciseInput = z.object({
   exerciseId: z.number(),
@@ -14,7 +30,6 @@ export const createRoutineValidator = z.object({
     z.discriminatedUnion('blockType', [
       z.object({
         blockType: z.literal('straight_set'),
-        name: z.string().nullable(),
         workout: z.object({
           sets: z.number(),
           rest: z.number().nullable(),
@@ -56,6 +71,8 @@ export const createRoutineValidator = z.object({
     ]),
   ),
 })
+
+export type CreateRoutine = z.infer<typeof createRoutineValidator>
 
 const testRoutine = {
   name: 'Monday Push Day',
