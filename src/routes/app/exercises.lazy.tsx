@@ -86,7 +86,7 @@ function RouteComponent() {
             <FunnelX className="w-4 h-4" />
           </Button>
           <Pagination
-            className=" ml-auto @max-lg:absolute @max-lg:bottom-0 @max-lg:left-0 @max-lg:right-0 @max-lg:w-full"
+            className=" ml-auto"
             currentPage={data?.meta.currentPage || 1}
             limit={limit}
             limitOptions={[10, 20, 50]}

@@ -9,6 +9,7 @@ import { Separator } from '@/components/ui/separator'
 
 export const Route = createFileRoute('/app')({
   beforeLoad: ({ context, location }) => {
+    console.log('context', context)
     if (!context.auth.getState().isAuthenticated) {
       throw redirect({
         to: '/login',

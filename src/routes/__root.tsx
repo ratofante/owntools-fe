@@ -8,6 +8,7 @@ import { TanStackDevtools } from '@tanstack/react-devtools'
 import type { QueryClient } from '@tanstack/react-query'
 import type { useAuth } from '@/hooks/use-auth'
 import TanStackQueryDevtools from '@/integrations/tanstack-query/devtools.tsx'
+import { NotFound } from '@/components/not-found'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -15,6 +16,7 @@ interface MyRouterContext {
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
+  notFoundComponent: NotFound,
   component: () => (
     <>
       <Outlet />

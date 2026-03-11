@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import type { Exercise } from '@/types/exercise'
 
 interface ExercisesTableState {
   page: number
@@ -11,6 +12,13 @@ interface ExercisesTableState {
   setBodyZones: (bodyZones: Array<string>) => void
   muscleGroups: Array<string>
   setMuscleGroups: (muscleGroups: Array<string>) => void
+
+  /** Exercise Sheet */
+  openExerciseSheet: boolean
+  setOpenExerciseSheet: (openExerciseSheet: boolean) => void
+  exercise: Exercise | null
+  setExercise: (exercise: Exercise | null) => void
+
   hasFilters: () => boolean
   clearFilters: () => void
 }
@@ -26,6 +34,13 @@ export const useExercisesTable = create<ExercisesTableState>((set, get) => ({
   setBodyZones: (bodyZones) => set({ bodyZones }),
   muscleGroups: [],
   setMuscleGroups: (muscleGroups) => set({ muscleGroups }),
+
+  /** Exercise Sheet */
+  openExerciseSheet: false,
+  setOpenExerciseSheet: (openExerciseSheet) => set({ openExerciseSheet }),
+  exercise: null,
+  setExercise: (exercise) => set({ exercise }),
+
   hasFilters: () => {
     return (
       get().searchName !== '' ||
