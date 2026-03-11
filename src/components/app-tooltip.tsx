@@ -20,7 +20,7 @@ export function AppTooltip({
         <Icon className="size-4" />
       </TooltipTrigger>
       <TooltipContent>
-        <p className="max-w-xs leading-4.5">{content}</p>
+        <div className="max-w-xs leading-4.5">{content}</div>
       </TooltipContent>
     </Tooltip>
   )

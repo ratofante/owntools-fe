@@ -1,7 +1,7 @@
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { FunnelX, SearchIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { useGetExercises } from '@/hooks/use-get-exercises'
+import { useGetExercisesPaginated } from '@/hooks/use-exercises'
 import { useDebounce } from '@/hooks/use-debounce'
 import { Pagination } from '@/components/pagination'
 import { useExercisesTable } from '@/hooks/use-exercises-table'
@@ -31,7 +31,7 @@ function RouteComponent() {
     hasFilters,
     clearFilters,
   } = useExercisesTable()
-  const { data, isLoading } = useGetExercises({
+  const { data, isLoading } = useGetExercisesPaginated({
     page: page,
     limit: limit,
     search: searchName,
