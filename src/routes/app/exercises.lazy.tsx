@@ -40,6 +40,8 @@ function RouteComponent() {
   })
   const exercises = data?.data || []
 
+  console.log(data)
+
   const debouncedSearchName = useDebounce(search, 500)
 
   useEffect(() => {

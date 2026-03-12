@@ -1,40 +1,15 @@
-import { Activity, ClockFading, Dumbbell, FileClock } from 'lucide-react'
 import type { WorkoutTypeOption } from '@/types/routine'
 import { Button } from '@/components/ui/button'
 import { AppTooltip } from '@/components/app-tooltip'
 import { Label } from '@/components/ui/label'
+import { workoutTypes } from '@/consts/workout-types'
 
 export function WorkoutTypeSelector({
   onSelect,
 }: {
   onSelect: (type: WorkoutTypeOption) => void
 }) {
-  const buttons: Array<WorkoutTypeOption> = [
-    {
-      type: 'straight_set',
-      label: 'Single',
-      description: 'Sets of reps of a single exercise',
-      icon: Dumbbell,
-    },
-    {
-      type: 'timed_set',
-      label: 'Timed Set',
-      description: 'A timed block of multiple exercises (AMRAP or Chipper)',
-      icon: ClockFading,
-    },
-    {
-      type: 'emom',
-      label: 'EMOM',
-      description: 'Every Minute On the Minute (EMOM)',
-      icon: FileClock,
-    },
-    {
-      type: 'hiit',
-      label: 'HIIT',
-      description: 'High Intensity Interval Training (HIIT)',
-      icon: Activity,
-    },
-  ]
+  const buttons: Array<WorkoutTypeOption> = Object.values(workoutTypes)
 
   return (
     <div className="space-y-4">

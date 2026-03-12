@@ -1,12 +1,21 @@
 import { useState } from 'react'
 import { ArrowLeftIcon } from 'lucide-react'
-import type { WorkoutTypeOption } from '@/types/routine'
+import type { WorkoutBlockDraft, WorkoutTypeOption } from '@/types/routine'
 import { WorkoutTypeSelector } from '@/components/routines/workout-type-selector'
 import { StraightSetBuilder } from '@/components/routines/straight_set_builder'
 import { Button } from '@/components/ui/button'
 
-export function WorkoutBlockBuilder() {
+export function WorkoutBlockBuilder({
+  onBlockComplete,
+}: {
+  onBlockComplete: (block: WorkoutBlockDraft) => void
+}) {
   const [workoutType, setWorkoutType] = useState<WorkoutTypeOption | null>(null)
+
+  function handleBlockComplete(block: WorkoutBlockDraft) {
+    onBlockComplete(block)
+    setWorkoutType(null)
+  }
 
   return (
     <div className="space-y-6">
@@ -22,7 +31,9 @@ export function WorkoutBlockBuilder() {
             <workoutType.icon className="size-4" />
             {workoutType.label}
           </h3>
-          <StraightSetBuilder />
+          <StraightSetBuilder
+            onBlockComplete={(block) => handleBlockComplete(block)}
+          />
         </div>
       )}
       {workoutType && (

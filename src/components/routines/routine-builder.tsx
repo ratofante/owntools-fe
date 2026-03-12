@@ -3,14 +3,11 @@ import { useForm } from '@tanstack/react-form'
 import { format } from 'date-fns'
 
 import type { User } from '@/hooks/use-auth'
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from '@/components/ui/field'
+import type { WorkoutBlockDraft } from '@/types/routine'
+import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { WorkoutBlockBuilder } from '@/components/routines/workout-block-builder'
+import { WorkoutBlockCard } from '@/components/routines/workout-block-card'
 
 export function RoutineBuilder({ user }: { user: User }) {
   const formOptions = useMemo(() => {
@@ -18,7 +15,7 @@ export function RoutineBuilder({ user }: { user: User }) {
       defaultValues: {
         name: `${format(new Date(), 'dd-MM-yyyy')} Routine`,
         createdBy: user.id,
-        workoutBlocks: [],
+        workoutBlocks: [] as Array<WorkoutBlockDraft>,
       },
     }
   }, [user])
@@ -57,7 +54,32 @@ export function RoutineBuilder({ user }: { user: User }) {
         }}
       />
 
-      <WorkoutBlockBuilder />
+      <form.Subscribe
+        selector={(state) => state.values.workoutBlocks}
+        children={(workoutBlocks) => (
+          <div className="space-y-2">
+            {workoutBlocks.map((block, index) => (
+              <WorkoutBlockCard
+                key={index}
+                block={block}
+                editMode={true}
+                onDelete={() => {
+                  form.setFieldValue('workoutBlocks', (prev) =>
+                    prev.filter((_, i) => i !== index),
+                  )
+                }}
+              />
+            ))}
+          </div>
+        )}
+      />
+
+      <WorkoutBlockBuilder
+        onBlockComplete={(block) => {
+          form.setFieldValue('workoutBlocks', (prev) => [...prev, block])
+          console.log(form.state.values)
+        }}
+      />
     </form>
   )
 }

@@ -34,7 +34,7 @@ export const useGetExercisesPaginated = (payload: GetExercisesOptions) => {
 async function getExercisesPaginated(payload: GetExercisesOptions) {
   try {
     const response = await apiFetch(
-      `/exercises?page=${payload.page}&limit=${payload.limit}&searchName=${payload.search}${payload.bodyZones.length ? `&bodyZones=${payload.bodyZones.join(',')}` : ''}${payload.muscleGroups.length ? `&muscleGroups=${payload.muscleGroups.join(',')}` : ''}`,
+      `/exercises/paginated?page=${payload.page}&limit=${payload.limit}&searchName=${payload.search}${payload.bodyZones.length ? `&bodyZones=${payload.bodyZones.join(',')}` : ''}${payload.muscleGroups.length ? `&muscleGroups=${payload.muscleGroups.join(',')}` : ''}`,
       {
         method: 'GET',
         headers: {
