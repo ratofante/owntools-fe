@@ -1,21 +1,27 @@
-import { useState } from 'react'
 import { ArrowLeftIcon } from 'lucide-react'
-import type { WorkoutBlockDraft, WorkoutTypeOption } from '@/types/routine'
+import type { WorkoutBlockDraft } from '@/types/routine'
 import { WorkoutTypeSelector } from '@/components/routines/workout-type-selector'
 import { StraightSetBuilder } from '@/components/routines/straight_set_builder'
 import { Button } from '@/components/ui/button'
+import { useRoutineBuilderStore } from '@/stores/routine-builder-store'
 
 export function WorkoutBlockBuilder({
   onBlockComplete,
 }: {
   onBlockComplete: (block: WorkoutBlockDraft) => void
 }) {
-  const [workoutType, setWorkoutType] = useState<WorkoutTypeOption | null>(null)
+  const { workoutType, editingBlock, setWorkoutType, reset } =
+    useRoutineBuilderStore()
 
   function handleBlockComplete(block: WorkoutBlockDraft) {
     onBlockComplete(block)
-    setWorkoutType(null)
+    reset()
   }
+
+  const straightSetInitialData =
+    editingBlock?.block.blockType === 'straight_set'
+      ? editingBlock.block
+      : null
 
   return (
     <div className="space-y-6">
@@ -31,13 +37,19 @@ export function WorkoutBlockBuilder({
             <workoutType.icon className="size-4" />
             {workoutType.label}
           </h3>
-          <StraightSetBuilder
-            onBlockComplete={(block) => handleBlockComplete(block)}
-          />
+          {workoutType.type === 'straight_set' && (
+            <StraightSetBuilder
+              key={
+                editingBlock ? `edit-${editingBlock.index}` : 'new'
+              }
+              initialData={straightSetInitialData}
+              onBlockComplete={(block) => handleBlockComplete(block)}
+            />
+          )}
         </div>
       )}
       {workoutType && (
-        <Button variant="outline" onClick={() => setWorkoutType(null)}>
+        <Button variant="outline" onClick={() => reset()}>
           <ArrowLeftIcon className="size-4" />
           Back
         </Button>

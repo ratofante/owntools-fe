@@ -8,8 +8,12 @@ import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { WorkoutBlockBuilder } from '@/components/routines/workout-block-builder'
 import { WorkoutBlockCard } from '@/components/routines/workout-block-card'
+import { workoutTypes } from '@/consts/workout-types'
+import { useRoutineBuilderStore } from '@/stores/routine-builder-store'
 
 export function RoutineBuilder({ user }: { user: User }) {
+  const { editingBlock, startEditing } = useRoutineBuilderStore()
+
   const formOptions = useMemo(() => {
     return {
       defaultValues: {
@@ -23,6 +27,17 @@ export function RoutineBuilder({ user }: { user: User }) {
   const form = useForm({
     ...formOptions,
   })
+
+  function handleBlockComplete(block: WorkoutBlockDraft) {
+    if (editingBlock !== null) {
+      form.setFieldValue('workoutBlocks', (prev) =>
+        prev.map((b, i) => (i === editingBlock.index ? block : b)),
+      )
+    } else {
+      form.setFieldValue('workoutBlocks', (prev) => [...prev, block])
+    }
+    console.log(form.state.values)
+  }
 
   return (
     <form
@@ -68,18 +83,16 @@ export function RoutineBuilder({ user }: { user: User }) {
                     prev.filter((_, i) => i !== index),
                   )
                 }}
+                onEdit={() => {
+                  startEditing(index, block, workoutTypes[block.blockType])
+                }}
               />
             ))}
           </div>
         )}
       />
 
-      <WorkoutBlockBuilder
-        onBlockComplete={(block) => {
-          form.setFieldValue('workoutBlocks', (prev) => [...prev, block])
-          console.log(form.state.values)
-        }}
-      />
+      <WorkoutBlockBuilder onBlockComplete={handleBlockComplete} />
     </form>
   )
 }

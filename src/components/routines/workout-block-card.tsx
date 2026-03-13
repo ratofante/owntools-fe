@@ -11,7 +11,6 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-
 import { Badge } from '@/components/ui/badge'
 import {
   DropdownMenu,
@@ -19,16 +18,21 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { useRoutineBuilderStore } from '@/stores/routine-builder-store'
 
 export function WorkoutBlockCard({
   block,
   editMode = false,
   onDelete,
+  onEdit,
 }: {
   block: WorkoutBlockDraft
   editMode?: boolean
   onDelete: () => void
+  onEdit?: () => void
 }) {
+  const isBuilderActive = useRoutineBuilderStore((s) => s.workoutType !== null)
+
   return (
     <>
       {block.blockType === 'straight_set' && (
@@ -57,7 +61,12 @@ export function WorkoutBlockCard({
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent side="right" align="start">
-                    <DropdownMenuItem>Edit</DropdownMenuItem>
+                    <DropdownMenuItem
+                      disabled={isBuilderActive}
+                      onSelect={onEdit}
+                    >
+                      Edit
+                    </DropdownMenuItem>
                     <DropdownMenuItem variant="destructive" onSelect={onDelete}>
                       Delete
                     </DropdownMenuItem>

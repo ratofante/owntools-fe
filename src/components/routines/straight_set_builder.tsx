@@ -2,7 +2,11 @@ import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { z } from 'zod'
 import type { Exercise } from '@/types/exercise'
-import type { TargetWeightUnit, WorkoutBlockDraft } from '@/types/routine'
+import type {
+  StraightSetBlockDraft,
+  TargetWeightUnit,
+  WorkoutBlockDraft,
+} from '@/types/routine'
 
 import {
   Field,
@@ -31,22 +35,25 @@ const straightSetValidator = z.object({
 
 export function StraightSetBuilder({
   onBlockComplete,
+  initialData,
 }: {
   onBlockComplete: (block: WorkoutBlockDraft) => void
+  initialData?: StraightSetBlockDraft | null
 }) {
   const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(
-    null,
+    initialData?.workout.setExercise.exercise ?? null,
   )
   const form = useForm({
     defaultValues: {
-      exercise_id: undefined as number | undefined,
-      workout_name: '' as string | undefined,
-      sets: 3,
-      repetitions: 6,
-      target_weight: undefined as number | undefined,
-      target_weight_unit: 'kg' as TargetWeightUnit | null,
-      percentage: undefined as number | undefined,
-      rest: undefined as number | undefined,
+      exercise_id: initialData?.workout.setExercise.exercise.id,
+      workout_name: (initialData?.name ?? '') as string | undefined,
+      sets: initialData?.workout.sets ?? 3,
+      repetitions: initialData?.workout.setExercise.repetitions ?? 6,
+      target_weight: initialData?.workout.setExercise.targetWeight ?? undefined,
+      target_weight_unit: (initialData?.workout.setExercise.targetWeightUnit ??
+        'kg') as TargetWeightUnit | null,
+      percentage: initialData?.workout.setExercise.percentage ?? undefined,
+      rest: initialData?.workout.rest ?? undefined,
     },
     validators: {
       onSubmit: straightSetValidator,
@@ -71,6 +78,7 @@ export function StraightSetBuilder({
   })
 
   const hasExercise = !!form.state.values.exercise_id
+  const isEditing = initialData != null
 
   return (
     <div className="flex flex-col gap-6">
@@ -299,7 +307,7 @@ export function StraightSetBuilder({
         disabled={!hasExercise || !form.state.isValid}
         className="mt-8"
       >
-        Add Block
+        {isEditing ? 'Update Block' : 'Add Block'}
       </Button>
     </div>
   )
