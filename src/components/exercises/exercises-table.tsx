@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
 import { ExerciseSheet } from '@/components/exercises/exercise-sheet'
-import { useExercisesTable } from '@/hooks/use-exercises-table'
+import { exercisesTableStore } from '@/stores/exercises-table-store'
 
 const exerciseColumns: Array<ColumnDef<Exercise>> = [
   {
@@ -132,7 +132,7 @@ export function ExerciseTable({
     getCoreRowModel: getCoreRowModel(),
   })
   const { openExerciseSheet, setOpenExerciseSheet, exercise, setExercise } =
-    useExercisesTable()
+    exercisesTableStore()
 
   return (
     <>

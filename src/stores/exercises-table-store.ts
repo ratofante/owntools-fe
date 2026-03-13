@@ -23,7 +23,7 @@ interface ExercisesTableState {
   clearFilters: () => void
 }
 
-export const useExercisesTable = create<ExercisesTableState>((set, get) => ({
+export const exercisesTableStore = create<ExercisesTableState>((set, get) => ({
   page: 1,
   limit: 10,
   setPage: (page) => set({ page }),

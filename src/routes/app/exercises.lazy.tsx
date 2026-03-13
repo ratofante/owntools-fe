@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useGetExercisesPaginated } from '@/hooks/use-exercises'
 import { useDebounce } from '@/hooks/use-debounce'
 import { Pagination } from '@/components/pagination'
-import { useExercisesTable } from '@/hooks/use-exercises-table'
+import { exercisesTableStore } from '@/stores/exercises-table-store'
 import { ExerciseTable } from '@/components/exercises/exercises-table'
 import { Input } from '@/components/ui/input'
 import { BodyZonesMultipleSelect } from '@/components/body-zones/body-zones-multiple-select'
@@ -30,7 +30,7 @@ function RouteComponent() {
     setMuscleGroups,
     hasFilters,
     clearFilters,
-  } = useExercisesTable()
+  } = exercisesTableStore()
   const { data, isLoading } = useGetExercisesPaginated({
     page: page,
     limit: limit,
