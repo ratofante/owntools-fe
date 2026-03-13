@@ -167,7 +167,7 @@ export function MultiSelectValue({
     items.forEach((child) => child.style.removeProperty('display'))
     let amount = 0
     for (let i = items.length - 1; i >= 0; i--) {
-      const child = items[i]!
+      const child = items[i]
       if (containerElement.scrollWidth <= containerElement.clientWidth) {
         break
       }
@@ -360,7 +360,7 @@ function useMultiSelectContext() {
   return context
 }
 
-function debounce<T extends (...args: never[]) => void>(
+function debounce<T extends (...args: Array<never>) => void>(
   func: T,
   wait: number,
 ): (...args: Parameters<T>) => void {

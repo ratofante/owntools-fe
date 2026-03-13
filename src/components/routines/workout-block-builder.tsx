@@ -19,9 +19,7 @@ export function WorkoutBlockBuilder({
   }
 
   const straightSetInitialData =
-    editingBlock?.block.blockType === 'straight_set'
-      ? editingBlock.block
-      : null
+    editingBlock?.block.blockType === 'straight_set' ? editingBlock.block : null
 
   return (
     <div className="space-y-6">
@@ -39,9 +37,7 @@ export function WorkoutBlockBuilder({
           </h3>
           {workoutType.type === 'straight_set' && (
             <StraightSetBuilder
-              key={
-                editingBlock ? `edit-${editingBlock.index}` : 'new'
-              }
+              key={editingBlock ? `edit-${editingBlock.index}` : 'new'}
               initialData={straightSetInitialData}
               onBlockComplete={(block) => handleBlockComplete(block)}
             />
