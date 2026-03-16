@@ -92,21 +92,6 @@ const exerciseColumns: Array<ColumnDef<Exercise>> = [
     ),
   },
   {
-    accessorKey: 'Created By',
-    header: () => <div className="text-center">Created By</div>,
-    cell: ({ row }) => {
-      return (
-        <div className="text-center">
-          {row.original.createdBy ? (
-            row.original.user?.fullName
-          ) : (
-            <Badge variant="outline">System</Badge>
-          )}
-        </div>
-      )
-    },
-  },
-  {
     accessorKey: 'createdAt',
     header: () => <div className="text-right">Created At</div>,
     cell: ({ row }) => {

@@ -1,8 +1,9 @@
 import React from 'react'
-import { EllipsisVerticalIcon } from 'lucide-react'
+import { EllipsisVerticalIcon, GripVerticalIcon } from 'lucide-react'
+import { useSortable } from '@dnd-kit/react/sortable'
 import type { WorkoutBlockDraft } from '@/types/routine'
 import { workoutTypes } from '@/consts/workout-types'
-import { formatSecondsToTime } from '@/lib/utils'
+import { cn, formatSecondsToTime } from '@/lib/utils'
 import {
   Card,
   CardAction,
@@ -22,24 +23,39 @@ import { useRoutineBuilderStore } from '@/stores/routine-builder-store'
 
 export function WorkoutBlockCard({
   block,
+  id,
+  index,
   editMode = false,
   onDelete,
   onEdit,
 }: {
   block: WorkoutBlockDraft
+  id: number
+  index: number
   editMode?: boolean
   onDelete: () => void
   onEdit?: () => void
 }) {
   const isBuilderActive = useRoutineBuilderStore((s) => s.workoutType !== null)
+  const { ref, handleRef, isDragging } = useSortable({ id, index })
 
   return (
     <>
       {block.blockType === 'straight_set' && (
-        <Card size="sm">
+        <Card ref={ref} size="sm" className={cn(isDragging && 'opacity-50')}>
           <CardHeader>
             <CardTitle>
               <div className="flex gap-2 items-center w-fit">
+                {editMode && (
+                  <button
+                    ref={handleRef}
+                    type="button"
+                    className="cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground touch-none"
+                    aria-label="Drag to reorder"
+                  >
+                    <GripVerticalIcon className="size-4" />
+                  </button>
+                )}
                 <div className="grid row-span-2 place-items-center bg-muted w-9 h-9 rounded-sm">
                   {React.createElement(workoutTypes[block.blockType].icon, {
                     className: 'size-4',
