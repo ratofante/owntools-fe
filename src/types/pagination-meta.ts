@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const PaginationMeta = z.object({
+export const PaginationMetaSchema = z.object({
   total: z.number(),
   perPage: z.number(),
   currentPage: z.number(),
@@ -10,4 +10,4 @@ export const PaginationMeta = z.object({
   nextPageUrl: z.string().nullable(),
   previousPageUrl: z.string().nullable(),
 })
-export type PaginationMeta = z.infer<typeof PaginationMeta>
+export type PaginationMetaType = z.infer<typeof PaginationMetaSchema>

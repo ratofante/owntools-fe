@@ -1,6 +1,6 @@
-import { Separator } from '../ui/separator'
-import { VideoEmbed } from '../video-embed'
-import type { Exercise } from '@/types/exercise'
+import type { ExerciseType } from '@/types/exercise'
+import { Separator } from '@/components/ui/separator'
+import { VideoEmbed } from '@/components/video-embed'
 import {
   Sheet,
   SheetClose,
@@ -13,12 +13,11 @@ import {
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Label } from '@/components/ui/label'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface ExerciseSheetProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  exercise: Exercise | null
+  exercise: ExerciseType | null
 }
 
 export function ExerciseSheet({
@@ -50,79 +49,94 @@ export function ExerciseSheet({
           <VideoEmbed url={exercise?.videoUrl} />
           <Separator />
           {/* --- plain div version --- */}
-          <div>
-            <Label className="text-base font-semibold">Body Zones</Label>
-            {exercise?.bodyZones.length ? (
-              <div className="flex flex-col gap-2 mt-2">
-                {primaryBodyZones && primaryBodyZones.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
-                    <Label>Primary</Label>
-                    <div className="max-w-3xs flex flex-wrap gap-1 w-fit">
-                      {primaryBodyZones.map((bodyZone) => (
-                        <Badge
-                          key={bodyZone.id}
-                          variant="outline"
-                          style={{ backgroundColor: bodyZone.hexColor }}
-                        >
-                          {bodyZone.name}
-                        </Badge>
-                      ))}
+          <div className="flex gap-1">
+            <div className="flex-1">
+              <Label className="text-base font-medium">Body Zones</Label>
+              {exercise?.bodyZones.length ? (
+                <div className="flex flex-col gap-2 mt-2">
+                  {primaryBodyZones && primaryBodyZones.length > 0 && (
+                    <div className="flex flex-col gap-1">
+                      <Label className="text-muted-foreground text-xs">
+                        Primary
+                      </Label>
+                      <div className="max-w-3xs flex flex-wrap gap-1 w-fit">
+                        {primaryBodyZones.map((bodyZone) => (
+                          <Badge
+                            key={bodyZone.id}
+                            variant="outline"
+                            style={{ backgroundColor: bodyZone.hexColor }}
+                          >
+                            {bodyZone.name}
+                          </Badge>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
-                {secondaryBodyZones && secondaryBodyZones.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
-                    <Label>Secondary</Label>
-                    <div className="max-w-3xs flex flex-wrap gap-1 w-fit">
-                      {secondaryBodyZones.map((bodyZone) => (
-                        <Badge
-                          key={bodyZone.id}
-                          variant="outline"
-                          style={{ backgroundColor: bodyZone.hexColor }}
-                        >
-                          {bodyZone.name}
-                        </Badge>
-                      ))}
+                  )}
+                  {secondaryBodyZones && secondaryBodyZones.length > 0 && (
+                    <div className="flex flex-col gap-1">
+                      <Label className="text-muted-foreground text-xs">
+                        Secondary
+                      </Label>
+                      <div className="max-w-3xs flex flex-wrap gap-1 w-fit">
+                        {secondaryBodyZones.map((bodyZone) => (
+                          <Badge
+                            key={bodyZone.id}
+                            variant="outline"
+                            style={{ backgroundColor: bodyZone.hexColor }}
+                          >
+                            {bodyZone.name}
+                          </Badge>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <Label className="block mt-2">No body zones registered</Label>
-            )}
-          </div>
-          <div>
-            <Label className="text-base font-semibold">Muscle Groups</Label>
-            {exercise?.muscleGroups.length ? (
-              <div className="flex flex-col gap-2 mt-2">
-                {primaryMuscleGroups && primaryMuscleGroups.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
-                    <Label>Primary</Label>
-                    <div className="max-w-3xs flex flex-wrap gap-1 w-fit">
-                      {primaryMuscleGroups.map((muscleGroup) => (
-                        <Badge key={muscleGroup.id} variant="outline">
-                          {muscleGroup.name}
-                        </Badge>
-                      ))}
+                  )}
+                </div>
+              ) : (
+                <Label className="block mt-2">No body zones registered</Label>
+              )}
+            </div>
+            <div className="flex-1 bg-muted p-4 rounded-md">
+              <Label className="text-base font-medium underline text-muted-foreground">
+                Muscle Groups
+              </Label>
+              {exercise?.muscleGroups.length ? (
+                <div className="flex flex-col gap-2 mt-2">
+                  {primaryMuscleGroups && primaryMuscleGroups.length > 0 && (
+                    <div className="flex flex-col gap-1">
+                      <Label className="text-muted-foreground text-xs">
+                        Primary
+                      </Label>
+                      <div className="max-w-3xs flex flex-wrap gap-1 w-fit">
+                        {primaryMuscleGroups.map((muscleGroup) => (
+                          <Badge key={muscleGroup.id} variant="default">
+                            {muscleGroup.name}
+                          </Badge>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
-                {secondaryMuscleGroups && secondaryMuscleGroups.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
-                    <Label>Secondary</Label>
-                    <div className="max-w-3xs flex flex-wrap gap-1 w-fit">
-                      {secondaryMuscleGroups.map((muscleGroup) => (
-                        <Badge key={muscleGroup.id} variant="secondary">
-                          {muscleGroup.name}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <Label className="block mt-2">No muscle groups registered</Label>
-            )}
+                  )}
+                  {secondaryMuscleGroups &&
+                    secondaryMuscleGroups.length > 0 && (
+                      <div className="flex flex-col gap-1">
+                        <Label className="text-muted-foreground text-xs">
+                          Secondary
+                        </Label>
+                        <div className="max-w-3xs flex flex-wrap gap-1 w-fit">
+                          {secondaryMuscleGroups.map((muscleGroup) => (
+                            <Badge key={muscleGroup.id} variant="secondary">
+                              {muscleGroup.name}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                </div>
+              ) : (
+                <Label className="block mt-2">
+                  No muscle groups registered
+                </Label>
+              )}
+            </div>
           </div>
         </div>
         <SheetFooter>

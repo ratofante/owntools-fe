@@ -4,12 +4,13 @@ import { useEffect, useState } from 'react'
 import { useGetExercisesPaginated } from '@/hooks/use-exercises'
 import { useDebounce } from '@/hooks/use-debounce'
 import { Pagination } from '@/components/pagination'
-import { exercisesTableStore } from '@/stores/exercises-table-store'
+import { useExercisesTableStore } from '@/stores/exercises-table-store'
 import { ExerciseTable } from '@/components/exercises/exercises-table'
 import { Input } from '@/components/ui/input'
 import { BodyZonesMultipleSelect } from '@/components/body-zones/body-zones-multiple-select'
 import { MuscleGroupsMultipleSelect } from '@/components/muscle-groups/muscle-groups-multiple-select'
 import { Button } from '@/components/ui/button'
+import { AddExercise } from '@/components/exercises/add-exercise'
 
 export const Route = createLazyFileRoute('/app/exercises')({
   component: RouteComponent,
@@ -30,7 +31,7 @@ function RouteComponent() {
     setMuscleGroups,
     hasFilters,
     clearFilters,
-  } = exercisesTableStore()
+  } = useExercisesTableStore()
   const { data, isLoading } = useGetExercisesPaginated({
     page: page,
     limit: limit,
@@ -60,7 +61,10 @@ function RouteComponent() {
 
   return (
     <div className="flex-1 flex flex-col @container">
-      <h1 className="text-2xl font-bold">Exercises</h1>
+      <div className="flex items-center gap-2">
+        <h1 className="text-2xl font-bold mr-auto">Exercises</h1>
+        <AddExercise />
+      </div>
       <div className="flex-1">
         <div className="flex items-center gap-2">
           <Input

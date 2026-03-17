@@ -1,4 +1,4 @@
-import type { WorkoutTypeOption } from '@/types/routine'
+import type { WorkoutTypeOption } from '@/types/routine-old'
 import { Button } from '@/components/ui/button'
 import { AppTooltip } from '@/components/app-tooltip'
 import { Label } from '@/components/ui/label'

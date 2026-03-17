@@ -11,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { useAuth } from '@/hooks/use-auth'
+import { useAuthStore } from '@/stores/auth-store'
 import {
   Field,
   FieldError,
@@ -29,7 +29,7 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<'div'>) {
-  const auth = useAuth()
+  const auth = useAuthStore()
   const navigate = useNavigate({ from: '/login' })
   const form = useForm({
     defaultValues: {

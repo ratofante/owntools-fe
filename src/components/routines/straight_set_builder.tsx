@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { z } from 'zod'
-import type { Exercise } from '@/types/exercise'
+import type { ExerciseType } from '@/types/exercise'
 import type {
   StraightSetBlockDraft,
   TargetWeightUnit,
   WorkoutBlockDraft,
-} from '@/types/routine'
+} from '@/types/routine-old'
 
 import {
   Field,
@@ -40,7 +40,7 @@ export function StraightSetBuilder({
   onBlockComplete: (block: WorkoutBlockDraft) => void
   initialData?: StraightSetBlockDraft | null
 }) {
-  const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(
+  const [selectedExercise, setSelectedExercise] = useState<ExerciseType | null>(
     initialData?.workout.setExercise.exercise ?? null,
   )
   const form = useForm({

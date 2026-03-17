@@ -1,11 +1,9 @@
 import { z } from 'zod'
 
-export const MuscleGroup = z.object({
+export const MuscleGroupSchema = z.object({
   id: z.number(),
   name: z.string(),
   description: z.string(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
+  involvement_level: z.enum(['primary', 'secondary']).optional(),
 })
-
-export type MuscleGroup = z.infer<typeof MuscleGroup>
+export type MuscleGroupType = z.infer<typeof MuscleGroupSchema>

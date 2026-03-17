@@ -1,4 +1,4 @@
-import type { TargetWeightUnit } from '@/types/routine'
+import type { TargetWeightUnit } from '@/types/routine-old'
 import {
   Select,
   SelectContent,

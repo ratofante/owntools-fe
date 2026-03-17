@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import type { Exercise } from '@/types/exercise'
-import type { PaginationMeta } from '@/types/pagination-meta'
+import type { ExerciseType } from '@/types/exercise'
+import type { PaginationMetaType } from '@/types/pagination-meta'
 import { apiFetch } from '@/lib/api-client'
 
 export interface GetExercisesOptions {
@@ -12,8 +12,8 @@ export interface GetExercisesOptions {
 }
 
 export interface GetExercisesResponse {
-  meta: PaginationMeta
-  data: Array<Exercise>
+  meta: PaginationMetaType
+  data: Array<ExerciseType>
 }
 
 export const useGetExercisesPaginated = (payload: GetExercisesOptions) => {
@@ -50,7 +50,7 @@ async function getExercisesPaginated(payload: GetExercisesOptions) {
     const data = await response.json()
     return data as GetExercisesResponse
   } catch (error) {
-    console.error('Error getting expenses: ', error)
+    console.error('Error getting expenses:', error)
     throw error
   }
 }
@@ -77,7 +77,7 @@ async function getExercises() {
     }
 
     const data = await response.json()
-    return data as Array<Exercise>
+    return data as Array<ExerciseType>
   } catch (error) {
     console.error('Error getting exercises: ', error)
     throw error

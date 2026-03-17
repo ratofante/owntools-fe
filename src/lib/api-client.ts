@@ -1,4 +1,4 @@
-import { useAuth } from '@/hooks/use-auth'
+import { useAuthStore } from '@/stores/auth-store'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL.toString()
 
@@ -29,7 +29,7 @@ export async function apiFetch(
   let authHeader: Record<string, string> | undefined
 
   if (!skipAuth) {
-    authHeader = useAuth.getState().getAuthHeader()
+    authHeader = useAuthStore.getState().getAuthHeader()
   }
 
   if (authHeader?.Authorization) {
@@ -43,7 +43,7 @@ export async function apiFetch(
   })
 
   if (response.status === 401) {
-    useAuth.getState().logout()
+    useAuthStore.getState().logout()
     throw new Error('Unauthorized')
   }
 

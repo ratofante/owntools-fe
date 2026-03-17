@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { CheckIcon, ChevronsUpDownIcon } from 'lucide-react'
-import type { Exercise } from '@/types/exercise'
+import type { ExerciseType } from '@/types/exercise'
 import { useGetExercises } from '@/hooks/use-exercises'
 import { Button } from '@/components/ui/button'
 import {
@@ -20,8 +20,8 @@ import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
 
 interface ExerciseSelectProps {
-  value: Exercise | null
-  onSelect: (exercise: Exercise | null) => void
+  value: ExerciseType | null
+  onSelect: (exercise: ExerciseType | null) => void
 }
 
 export function ExerciseSelect({ value, onSelect }: ExerciseSelectProps) {

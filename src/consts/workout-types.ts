@@ -1,29 +1,47 @@
 import { Activity, ClockFading, Dumbbell, FileClock } from 'lucide-react'
-import type { WorkoutType, WorkoutTypeOption } from '@/types/routine'
+import type { LucideIcon } from 'lucide-react'
+import type { WorkoutBlockKind } from '@/types/workout-block'
 
 export const workoutTypes = {
-  straight_set: {
-    type: 'straight_set',
-    label: 'Single',
+  standard: {
+    type: 'standard',
+    label: 'Standard',
     description: 'Sets of reps of a single exercise',
     icon: Dumbbell,
   },
-  timed_set: {
-    type: 'timed_set',
-    label: 'Timed Set',
-    description: 'A timed block of multiple exercises (AMRAP or Chipper)',
+  superset: {
+    type: 'superset',
+    label: 'Superset',
+    description: 'Two or more exercises performed back-to-back with no rest',
+    icon: Dumbbell,
+  },
+  circuit: {
+    type: 'circuit',
+    label: 'Circuit',
+    description: 'Multiple exercises performed in sequence with minimal rest',
+    icon: Activity,
+  },
+  amrap: {
+    type: 'amrap',
+    label: 'AMRAP',
+    description: 'As Many Rounds As Possible within a time cap',
     icon: ClockFading,
   },
   emom: {
     type: 'emom',
     label: 'EMOM',
-    description: 'Every Minute On the Minute (EMOM)',
+    description: 'Every Minute On the Minute',
     icon: FileClock,
   },
   hiit: {
     type: 'hiit',
     label: 'HIIT',
-    description: 'High Intensity Interval Training (HIIT)',
+    description: 'High Intensity Interval Training',
     icon: Activity,
   },
-} as Record<WorkoutType, WorkoutTypeOption>
+} as Record<WorkoutBlockKind, {
+  type: WorkoutBlockKind
+  label: string
+  description: string
+  icon: LucideIcon
+}>

@@ -1,17 +1,10 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
+import type { UserType } from '@/types'
 
-export interface User {
-  id: number
-  email: string
-  fullName: string
-  createdAt: string
-  updatedAt: string
-}
-
-export interface AuthState {
+interface AuthStore {
   isAuthenticated: boolean
-  user: User | null
+  user: UserType | null
   token: string | null
   login: (email: string, password: string) => Promise<void>
   logout: () => void
@@ -20,7 +13,7 @@ export interface AuthState {
 
 const baseURL = import.meta.env.VITE_API_BASE_URL.toString()
 
-export const useAuth = create<AuthState>()(
+export const useAuthStore = create<AuthStore>()(
   persist(
     (set, get) => ({
       isAuthenticated: false,
@@ -40,7 +33,7 @@ export const useAuth = create<AuthState>()(
         const data = await res.json()
         set({
           isAuthenticated: true,
-          user: data.user as User,
+          user: data.user as UserType,
           token: data.token.token,
         })
       },

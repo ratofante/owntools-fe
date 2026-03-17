@@ -1,35 +1,36 @@
 import React from 'react'
-import { EllipsisVerticalIcon, GripVerticalIcon } from 'lucide-react'
+import {
+  ClockFading,
+  GripVerticalIcon,
+  PencilIcon,
+  TrashIcon,
+} from 'lucide-react'
 import { useSortable } from '@dnd-kit/react/sortable'
-import type { WorkoutBlockDraft } from '@/types/routine'
+import type { WorkoutBlockType, WorkoutBlockKind } from '@/types'
 import { workoutTypes } from '@/consts/workout-types'
 import { cn, formatSecondsToTime } from '@/lib/utils'
 import {
   Card,
   CardAction,
   CardContent,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
 import { useRoutineBuilderStore } from '@/stores/routine-builder-store'
+import { SetExercise } from '@/components/exercises/set-exercise'
 
 export function WorkoutBlockCard({
-  block,
+  workoutBlock,
   id,
   index,
   editMode = false,
   onDelete,
   onEdit,
 }: {
-  block: WorkoutBlockDraft
+  workoutBlock: WorkoutBlockType
   id: number
   index: number
   editMode?: boolean
@@ -41,82 +42,128 @@ export function WorkoutBlockCard({
 
   return (
     <>
-      {block.blockType === 'straight_set' && (
-        <Card ref={ref} size="sm" className={cn(isDragging && 'opacity-50')}>
-          <CardHeader>
-            <CardTitle>
-              <div className="flex gap-2 items-center w-fit">
-                {editMode && (
-                  <button
-                    ref={handleRef}
-                    type="button"
-                    className="cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground touch-none"
-                    aria-label="Drag to reorder"
-                  >
-                    <GripVerticalIcon className="size-4" />
-                  </button>
-                )}
-                <div className="grid row-span-2 place-items-center bg-muted w-9 h-9 rounded-sm">
-                  {React.createElement(workoutTypes[block.blockType].icon, {
-                    className: 'size-4',
-                  })}
-                </div>
-                <p className="text-base font-medium">
-                  {block.workout.setExercise.exercise.name}:{' '}
-                  {block.workout.sets} sets of{' '}
-                  {block.workout.setExercise.repetitions} reps
-                </p>
+      <Card
+        ref={ref}
+        size="default"
+        className={cn(isDragging && 'opacity-50', '')}
+      >
+        {editMode && (
+          <div className="flex gap-1 px-4 justify-between">
+            <Button
+              variant="outline"
+              size="icon"
+              ref={handleRef}
+              type="button"
+              className="cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground touch-none"
+              aria-label="Drag to reorder"
+            >
+              <GripVerticalIcon className="size-4" />
+            </Button>
+
+            <WorkoutTypeBadge workoutType={workoutBlock.type} />
+
+            <CardAction className="ml-auto">
+              <div className="flex gap-1">
+                <Button size="icon" variant="outline" onClick={onEdit}>
+                  <PencilIcon className="size-4" />
+                </Button>
+                <Button size="icon" variant="outline" onClick={onDelete}>
+                  <TrashIcon className="size-4" />
+                </Button>
               </div>
-            </CardTitle>
-            {editMode && (
-              <CardAction className="ml-auto">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                      <EllipsisVerticalIcon className="size-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent side="right" align="start">
-                    <DropdownMenuItem
-                      disabled={isBuilderActive}
-                      onSelect={onEdit}
-                    >
-                      Edit
-                    </DropdownMenuItem>
-                    <DropdownMenuItem variant="destructive" onSelect={onDelete}>
-                      Delete
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </CardAction>
+            </CardAction>
+          </div>
+        )}
+        <CardHeader>
+          <CardTitle>
+            <div className="flex gap-2 items-start justify-between">
+              <div className="flex flex-col gap-1">
+                {!workoutBlock.name && !workoutBlock.description ? (
+                  <p>{workoutTypes[workoutBlock.type].label}</p>
+                ) : (
+                  <div className="space-y-1">
+                    <p className="text-base font-medium">{workoutBlock.name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {workoutBlock.description}
+                    </p>
+                  </div>
+                )}
+              </div>
+              {!editMode && (
+                <Badge variant="default" className="size-8">
+                  {' '}
+                  {workoutBlock.position}
+                </Badge>
+              )}
+            </div>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-2">
+            {workoutBlock.workoutDuration && (
+              <Badge
+                variant="outline"
+                className="bg-secondary text-secondary-foreground"
+              >
+                <ClockFading className="size-4" />
+                {formatSecondsToTime(workoutBlock.workoutDuration)}
+              </Badge>
             )}
-          </CardHeader>
-          {(block.workout.setExercise.targetWeight ||
-            block.workout.setExercise.percentage ||
-            block.workout.rest) && (
-            <CardContent>
-              <div className="flex gap-2">
-                {block.workout.setExercise.targetWeight && (
-                  <Badge variant="default">
-                    {block.workout.setExercise.targetWeight}{' '}
-                    {block.workout.setExercise.targetWeightUnit}
+
+            {workoutBlock.roundsPerWorkout &&
+              workoutBlock.roundsPerWorkout > 1 && (
+                <div className="flex items-center gap-2">
+                  <Badge
+                    variant="outline"
+                    className="bg-secondary text-secondary-foreground"
+                  >
+                    {/* <RepeatIcon className="size-4" /> */}
+                    {workoutBlock.roundsPerWorkout} rounds
                   </Badge>
-                )}
-                {block.workout.setExercise.percentage && (
-                  <Badge variant="secondary">
-                    {block.workout.setExercise.percentage}%
-                  </Badge>
-                )}
-                {block.workout.rest && (
-                  <Badge variant="outline">
-                    {formatSecondsToTime(block.workout.rest)} between sets
-                  </Badge>
-                )}
+                  {workoutBlock.restAfterRound &&
+                    workoutBlock.restAfterRound > 0 && (
+                      <p className="leading-none text-xs font-medium text-muted-foreground">
+                        Rest {formatSecondsToTime(workoutBlock.restAfterRound)}{' '}
+                        between rounds
+                      </p>
+                    )}
+                </div>
+              )}
+
+            {workoutBlock.sets.length > 0 && (
+              <div className="flex flex-col gap-2 bg-background rounded-sm">
+                {workoutBlock.sets.map((set) => (
+                  <div key={set.id}>
+                    <SetExercise set={set} />
+                  </div>
+                ))}
               </div>
-            </CardContent>
-          )}
-        </Card>
-      )}
+            )}
+          </div>
+        </CardContent>
+        <CardFooter></CardFooter>
+      </Card>
     </>
+  )
+}
+
+function WorkoutTypeIcon({ workoutType }: { workoutType: WorkoutBlockKind }) {
+  return (
+    <div className="grid place-items-center bg-accent rounded-sm">
+      {React.createElement(workoutTypes[workoutType].icon, {
+        className: 'size-3',
+      })}
+    </div>
+  )
+}
+
+function WorkoutTypeBadge({ workoutType }: { workoutType: WorkoutBlockKind }) {
+  return (
+    <Badge className="bg-accent text-accent-foreground">
+      <WorkoutTypeIcon workoutType={workoutType} />
+      <span className="text-xs font-semibold text-accent-foreground">
+        {workoutTypes[workoutType].label}
+      </span>
+    </Badge>
   )
 }

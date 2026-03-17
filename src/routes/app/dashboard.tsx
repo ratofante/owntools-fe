@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useAuth } from '@/hooks/use-auth'
+import { useAuthStore } from '@/stores/auth-store'
 import { RoutineBuilder } from '@/components/routines/routine-builder'
 
 export const Route: any = createFileRoute('/app/dashboard')({
@@ -7,7 +7,7 @@ export const Route: any = createFileRoute('/app/dashboard')({
 })
 
 function Dashboard() {
-  const auth = useAuth()
+  const auth = useAuthStore()
 
   return (
     <>

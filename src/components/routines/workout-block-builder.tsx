@@ -1,5 +1,5 @@
 import { ArrowLeftIcon } from 'lucide-react'
-import type { WorkoutBlockDraft } from '@/types/routine'
+import type { WorkoutBlockDraft } from '@/types/routine-old'
 import { WorkoutTypeSelector } from '@/components/routines/workout-type-selector'
 import { StraightSetBuilder } from '@/components/routines/straight_set_builder'
 import { Button } from '@/components/ui/button'

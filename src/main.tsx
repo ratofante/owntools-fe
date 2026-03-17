@@ -9,7 +9,7 @@ import { routeTree } from './routeTree.gen'
 
 import './styles.css'
 import reportWebVitals from './reportWebVitals.ts'
-import { useAuth } from '@/hooks/use-auth.ts'
+import { useAuthStore } from '@/stores/auth-store.ts'
 
 // Create a new router instance
 const TanStackQueryProviderContext = TanStackQueryProvider.getContext()
@@ -18,7 +18,7 @@ const router = createRouter({
   context: {
     ...TanStackQueryProviderContext,
     /** We pass the Zustand store directly **/
-    auth: useAuth,
+    auth: useAuthStore,
   },
   defaultPreload: 'intent',
   scrollRestoration: true,

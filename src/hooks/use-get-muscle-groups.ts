@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
-import type { MuscleGroup } from '@/types/muscle-groups'
+import type { MuscleGroupType } from '@/types/muscle-groups'
 import { apiFetch } from '@/lib/api-client'
 
 export interface GetMuscleGroupsResponse {
-  data: Array<MuscleGroup>
+  data: Array<MuscleGroupType>
 }
 
 export const useGetMuscleGroups = () => {

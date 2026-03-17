@@ -1,6 +1,7 @@
 import { clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import type { ClassValue } from 'clsx'
+import type { TargetWeightUnit } from '@/types/routine'
 
 export function cn(...inputs: Array<ClassValue>) {
   return twMerge(clsx(inputs))
@@ -17,5 +18,10 @@ export function formatSecondsToTime(time: number) {
   }
   const minutes = Math.floor(time / 60)
   const seconds = time % 60
-  return `${minutes}'${seconds}"`
+  return seconds === 0 ? `${minutes}'` : `${minutes}'${seconds}"`
+}
+
+export function formatWeight(weight: string | number, unit?: TargetWeightUnit) {
+  const value = parseFloat(String(weight))
+  return `${value} ${unit ?? ''}`
 }

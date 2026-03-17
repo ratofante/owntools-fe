@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
-import type { BodyZone } from '@/types/body-zone'
+import type { BodyZoneType } from '@/types/body-zone'
 import { apiFetch } from '@/lib/api-client'
 
 export interface GetBodyZonesResponse {
-  data: Array<BodyZone>
+  data: Array<BodyZoneType>
 }
 
 export const useGetBodyZones = () => {

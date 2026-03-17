@@ -1,36 +1,25 @@
 import { z } from 'zod'
+import { BodyZoneSchema } from './body-zone'
+import { MuscleGroupSchema } from './muscle-groups'
 
-export const Exercise = z.object({
+export const ExerciseSchema = z.object({
   id: z.number(),
-  createdBy: z.number().nullable(),
   name: z.string(),
   description: z.string().nullable(),
   videoUrl: z.string().nullable(),
   createdAt: z.string(),
   updatedAt: z.string(),
-  user: z
-    .object({
-      id: z.number(),
-      fullName: z.string(),
-      email: z.string(),
-    })
-    .nullable(),
-  bodyZones: z.array(
-    z.object({
-      id: z.number(),
-      name: z.string(),
-      description: z.string(),
-      hexColor: z.string(),
-      zone_importance: z.enum(['primary', 'secondary']),
-    }),
-  ),
-  muscleGroups: z.array(
-    z.object({
-      id: z.number(),
-      name: z.string(),
-      description: z.string(),
-      involvement_level: z.enum(['primary', 'secondary']),
-    }),
-  ),
+  bodyZones: z.array(BodyZoneSchema),
+  muscleGroups: z.array(MuscleGroupSchema),
 })
-export type Exercise = z.infer<typeof Exercise>
+export type ExerciseType = z.infer<typeof ExerciseSchema>
+
+export const CreateExerciseSchema = ExerciseSchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+})
+export type CreateExerciseType = z.infer<typeof CreateExerciseSchema>
+
+export const UpdateExerciseSchema = CreateExerciseSchema.partial()
+export type UpdateExerciseType = z.infer<typeof UpdateExerciseSchema>

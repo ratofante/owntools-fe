@@ -1,11 +1,12 @@
 import { z } from 'zod'
 
-export const BodyZone = z.object({
+export const BodyZoneSchema = z.object({
   id: z.number(),
   name: z.string(),
   description: z.string(),
   hexColor: z.string(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
+  createdAt: z.string().optional(),
+  updatedAt: z.string().optional(),
+  zone_importance: z.enum(['primary', 'secondary']).optional(),
 })
-export type BodyZone = z.infer<typeof BodyZone>
+export type BodyZoneType = z.infer<typeof BodyZoneSchema>

@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { WorkoutBlockDraft, WorkoutTypeOption } from '@/types/routine'
+import type { WorkoutBlockDraft, WorkoutTypeOption } from '@/types/routine-old'
 
 type EditingBlock = {
   index: number

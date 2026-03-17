@@ -6,7 +6,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import type { ColumnDef } from '@tanstack/react-table'
-import type { Exercise } from '@/types/exercise'
+import type { ExerciseType } from '@/types/exercise'
 import {
   Table,
   TableBody,
@@ -17,9 +17,9 @@ import {
 } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
 import { ExerciseSheet } from '@/components/exercises/exercise-sheet'
-import { exercisesTableStore } from '@/stores/exercises-table-store'
+import { useExercisesTableStore } from '@/stores/exercises-table-store'
 
-const exerciseColumns: Array<ColumnDef<Exercise>> = [
+const exerciseColumns: Array<ColumnDef<ExerciseType>> = [
   {
     accessorKey: 'name',
     header: 'Name',
@@ -108,7 +108,7 @@ export function ExerciseTable({
   exercises,
   isLoading,
 }: {
-  exercises: Array<Exercise>
+  exercises: Array<ExerciseType>
   isLoading: boolean
 }) {
   const table = useReactTable({
@@ -117,7 +117,7 @@ export function ExerciseTable({
     getCoreRowModel: getCoreRowModel(),
   })
   const { openExerciseSheet, setOpenExerciseSheet, exercise, setExercise } =
-    exercisesTableStore()
+    useExercisesTableStore()
 
   return (
     <>

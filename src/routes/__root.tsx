@@ -6,13 +6,13 @@ import {
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import type { QueryClient } from '@tanstack/react-query'
-import type { useAuth } from '@/hooks/use-auth'
+import type { useAuthStore } from '@/stores/auth-store'
 import TanStackQueryDevtools from '@/integrations/tanstack-query/devtools.tsx'
 import { NotFound } from '@/components/not-found'
 
 interface MyRouterContext {
   queryClient: QueryClient
-  auth: typeof useAuth
+  auth: typeof useAuthStore
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({

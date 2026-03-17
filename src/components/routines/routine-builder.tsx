@@ -4,14 +4,14 @@ import { format } from 'date-fns'
 import { isSortableOperation } from '@dnd-kit/react/sortable'
 import { DragDropProvider } from '@dnd-kit/react'
 
-import type { User } from '@/hooks/use-auth'
-import type { WorkoutBlockDraft } from '@/types/routine'
+import type { RoutineType, UserType } from '@/types'
 import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { WorkoutBlockBuilder } from '@/components/routines/workout-block-builder'
 import { WorkoutBlockCard } from '@/components/routines/workout-block-card'
-import { workoutTypes } from '@/consts/workout-types'
 import { useRoutineBuilderStore } from '@/stores/routine-builder-store'
+import { useGetRoutine } from '@/hooks/use-routines'
+import { RoutineView } from '@/components/routines/routine-view'
 
 function reorder<T>(array: Array<T>, from: number, to: number): Array<T> {
   const result = [...array]
@@ -20,17 +20,20 @@ function reorder<T>(array: Array<T>, from: number, to: number): Array<T> {
   return result
 }
 
-export function RoutineBuilder({ user }: { user: User }) {
+export function RoutineBuilder({ user }: { user: UserType }) {
   const { editingBlock, startEditing } = useRoutineBuilderStore()
   const [blockIds, setBlockIds] = useState<Array<number>>([])
   const nextId = useRef(0)
+  const { data: routine } = useGetRoutine(1)
+
+  console.log(routine)
 
   const form = useForm({
     defaultValues: {
       name: `${format(new Date(), 'dd-MM-yyyy')} Routine`,
       createdBy: user.id,
-      workoutBlocks: [] as Array<WorkoutBlockDraft>,
-    },
+      workoutBlocks: [],
+    } as Partial<RoutineType>,
   })
 
   function handleBlockComplete(block: WorkoutBlockDraft) {
@@ -98,39 +101,25 @@ export function RoutineBuilder({ user }: { user: User }) {
             }}
           />
 
-          <form.Subscribe
-            selector={(state) => state.values.workoutBlocks}
-            children={(workoutBlocks) => (
+          {routine && (
+            <RoutineView routine={routine}>
               <DragDropProvider onDragEnd={handleDragEnd}>
                 <div className="space-y-2">
-                  {workoutBlocks.map((block, index) => (
+                  {routine.workoutBlocks.map((block, index) => (
                     <WorkoutBlockCard
-                      key={blockIds[index]}
-                      id={blockIds[index] ?? index}
+                      key={block.id}
+                      workoutBlock={block}
+                      id={block.id}
                       index={index}
-                      block={block}
-                      editMode={true}
-                      onDelete={() => {
-                        form.setFieldValue('workoutBlocks', (prev) =>
-                          prev.filter((_, i) => i !== index),
-                        )
-                        setBlockIds((prev) =>
-                          prev.filter((_, i) => i !== index),
-                        )
-                      }}
-                      onEdit={() => {
-                        startEditing(
-                          index,
-                          block,
-                          workoutTypes[block.blockType],
-                        )
-                      }}
+                      editMode={index != 2}
+                      onDelete={() => {}}
+                      onEdit={() => {}}
                     />
                   ))}
                 </div>
               </DragDropProvider>
-            )}
-          />
+            </RoutineView>
+          )}
         </div>
 
         <div className="@2xl:col-start-2 @2xl:row-start-1">

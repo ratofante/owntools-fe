@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/sidebar'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import { useAuth } from '@/hooks/use-auth'
+import { useAuthStore } from '@/stores/auth-store'
 
 const items = {
   application: [
@@ -34,7 +34,7 @@ const items = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const auth = useAuth()
+  const auth = useAuthStore()
   const navigate = useNavigate()
   const routerState = useRouterState()
   const currentPath = routerState.location.pathname
