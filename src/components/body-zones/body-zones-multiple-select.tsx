@@ -12,10 +12,12 @@ export function BodyZonesMultipleSelect({
   className,
   values,
   onValuesChange,
+  disabledValues,
 }: {
   className?: string
   values: Array<string>
   onValuesChange: (values: Array<string>) => void
+  disabledValues?: Array<string>
 }) {
   const { data, isLoading } = useGetBodyZones()
   const bodyZones = data?.data || []
@@ -31,7 +33,11 @@ export function BodyZonesMultipleSelect({
       <MultiSelectContent>
         <MultiSelectGroup>
           {bodyZones.map((bodyZone) => (
-            <MultiSelectItem key={bodyZone.id} value={bodyZone.id.toString()}>
+            <MultiSelectItem
+              key={bodyZone.id}
+              value={bodyZone.id.toString()}
+              disabled={disabledValues?.includes(bodyZone.id.toString())}
+            >
               {bodyZone.name}
             </MultiSelectItem>
           ))}

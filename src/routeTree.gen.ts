@@ -12,16 +12,26 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PublicRouteImport } from './routes/_public'
+import { Route as QuicksplitRouteRouteImport } from './routes/quicksplit/route'
 import { Route as AppRouteRouteImport } from './routes/app/route'
 import { Route as PublicIndexRouteImport } from './routes/_public.index'
+import { Route as QuicksplitDashboardRouteImport } from './routes/quicksplit/dashboard'
+import { Route as QuicksplitCreateSharedWalletRouteImport } from './routes/quicksplit/create-shared-wallet'
 import { Route as AppDashboardRouteImport } from './routes/app/dashboard'
 import { Route as PublicLoginRouteImport } from './routes/_public.login'
+import { Route as QuicksplitWalletsWalletIdRouteImport } from './routes/quicksplit/wallets/$walletId'
 import { Route as AppWalletsCreateRouteImport } from './routes/app/wallets/create'
+import { Route as AppExerciseEditorRouteImport } from './routes/app/exercise.editor'
 
 const AppExercisesLazyRouteImport = createFileRoute('/app/exercises')()
 
 const PublicRoute = PublicRouteImport.update({
   id: '/_public',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuicksplitRouteRoute = QuicksplitRouteRouteImport.update({
+  id: '/quicksplit',
+  path: '/quicksplit',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppRouteRoute = AppRouteRouteImport.update({
@@ -39,6 +49,17 @@ const AppExercisesLazyRoute = AppExercisesLazyRouteImport.update({
   path: '/exercises',
   getParentRoute: () => AppRouteRoute,
 } as any).lazy(() => import('./routes/app/exercises.lazy').then((d) => d.Route))
+const QuicksplitDashboardRoute = QuicksplitDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => QuicksplitRouteRoute,
+} as any)
+const QuicksplitCreateSharedWalletRoute =
+  QuicksplitCreateSharedWalletRouteImport.update({
+    id: '/create-shared-wallet',
+    path: '/create-shared-wallet',
+    getParentRoute: () => QuicksplitRouteRoute,
+  } as any)
 const AppDashboardRoute = AppDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -49,68 +70,110 @@ const PublicLoginRoute = PublicLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => PublicRoute,
 } as any)
+const QuicksplitWalletsWalletIdRoute =
+  QuicksplitWalletsWalletIdRouteImport.update({
+    id: '/wallets/$walletId',
+    path: '/wallets/$walletId',
+    getParentRoute: () => QuicksplitRouteRoute,
+  } as any)
 const AppWalletsCreateRoute = AppWalletsCreateRouteImport.update({
   id: '/wallets/create',
   path: '/wallets/create',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppExerciseEditorRoute = AppExerciseEditorRouteImport.update({
+  id: '/exercise/editor',
+  path: '/exercise/editor',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/app': typeof AppRouteRouteWithChildren
+  '/quicksplit': typeof QuicksplitRouteRouteWithChildren
   '/login': typeof PublicLoginRoute
   '/app/dashboard': typeof AppDashboardRoute
+  '/quicksplit/create-shared-wallet': typeof QuicksplitCreateSharedWalletRoute
+  '/quicksplit/dashboard': typeof QuicksplitDashboardRoute
   '/app/exercises': typeof AppExercisesLazyRoute
   '/': typeof PublicIndexRoute
+  '/app/exercise/editor': typeof AppExerciseEditorRoute
   '/app/wallets/create': typeof AppWalletsCreateRoute
+  '/quicksplit/wallets/$walletId': typeof QuicksplitWalletsWalletIdRoute
 }
 export interface FileRoutesByTo {
   '/app': typeof AppRouteRouteWithChildren
+  '/quicksplit': typeof QuicksplitRouteRouteWithChildren
   '/login': typeof PublicLoginRoute
   '/app/dashboard': typeof AppDashboardRoute
+  '/quicksplit/create-shared-wallet': typeof QuicksplitCreateSharedWalletRoute
+  '/quicksplit/dashboard': typeof QuicksplitDashboardRoute
   '/app/exercises': typeof AppExercisesLazyRoute
   '/': typeof PublicIndexRoute
+  '/app/exercise/editor': typeof AppExerciseEditorRoute
   '/app/wallets/create': typeof AppWalletsCreateRoute
+  '/quicksplit/wallets/$walletId': typeof QuicksplitWalletsWalletIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/app': typeof AppRouteRouteWithChildren
+  '/quicksplit': typeof QuicksplitRouteRouteWithChildren
   '/_public': typeof PublicRouteWithChildren
   '/_public/login': typeof PublicLoginRoute
   '/app/dashboard': typeof AppDashboardRoute
+  '/quicksplit/create-shared-wallet': typeof QuicksplitCreateSharedWalletRoute
+  '/quicksplit/dashboard': typeof QuicksplitDashboardRoute
   '/app/exercises': typeof AppExercisesLazyRoute
   '/_public/': typeof PublicIndexRoute
+  '/app/exercise/editor': typeof AppExerciseEditorRoute
   '/app/wallets/create': typeof AppWalletsCreateRoute
+  '/quicksplit/wallets/$walletId': typeof QuicksplitWalletsWalletIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/app'
+    | '/quicksplit'
     | '/login'
     | '/app/dashboard'
+    | '/quicksplit/create-shared-wallet'
+    | '/quicksplit/dashboard'
     | '/app/exercises'
     | '/'
+    | '/app/exercise/editor'
     | '/app/wallets/create'
+    | '/quicksplit/wallets/$walletId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/app'
+    | '/quicksplit'
     | '/login'
     | '/app/dashboard'
+    | '/quicksplit/create-shared-wallet'
+    | '/quicksplit/dashboard'
     | '/app/exercises'
     | '/'
+    | '/app/exercise/editor'
     | '/app/wallets/create'
+    | '/quicksplit/wallets/$walletId'
   id:
     | '__root__'
     | '/app'
+    | '/quicksplit'
     | '/_public'
     | '/_public/login'
     | '/app/dashboard'
+    | '/quicksplit/create-shared-wallet'
+    | '/quicksplit/dashboard'
     | '/app/exercises'
     | '/_public/'
+    | '/app/exercise/editor'
     | '/app/wallets/create'
+    | '/quicksplit/wallets/$walletId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   AppRouteRoute: typeof AppRouteRouteWithChildren
+  QuicksplitRouteRoute: typeof QuicksplitRouteRouteWithChildren
   PublicRoute: typeof PublicRouteWithChildren
 }
 
@@ -121,6 +184,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof PublicRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quicksplit': {
+      id: '/quicksplit'
+      path: '/quicksplit'
+      fullPath: '/quicksplit'
+      preLoaderRoute: typeof QuicksplitRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app': {
@@ -144,6 +214,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppExercisesLazyRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/quicksplit/dashboard': {
+      id: '/quicksplit/dashboard'
+      path: '/dashboard'
+      fullPath: '/quicksplit/dashboard'
+      preLoaderRoute: typeof QuicksplitDashboardRouteImport
+      parentRoute: typeof QuicksplitRouteRoute
+    }
+    '/quicksplit/create-shared-wallet': {
+      id: '/quicksplit/create-shared-wallet'
+      path: '/create-shared-wallet'
+      fullPath: '/quicksplit/create-shared-wallet'
+      preLoaderRoute: typeof QuicksplitCreateSharedWalletRouteImport
+      parentRoute: typeof QuicksplitRouteRoute
+    }
     '/app/dashboard': {
       id: '/app/dashboard'
       path: '/dashboard'
@@ -158,11 +242,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicLoginRouteImport
       parentRoute: typeof PublicRoute
     }
+    '/quicksplit/wallets/$walletId': {
+      id: '/quicksplit/wallets/$walletId'
+      path: '/wallets/$walletId'
+      fullPath: '/quicksplit/wallets/$walletId'
+      preLoaderRoute: typeof QuicksplitWalletsWalletIdRouteImport
+      parentRoute: typeof QuicksplitRouteRoute
+    }
     '/app/wallets/create': {
       id: '/app/wallets/create'
       path: '/wallets/create'
       fullPath: '/app/wallets/create'
       preLoaderRoute: typeof AppWalletsCreateRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/exercise/editor': {
+      id: '/app/exercise/editor'
+      path: '/exercise/editor'
+      fullPath: '/app/exercise/editor'
+      preLoaderRoute: typeof AppExerciseEditorRouteImport
       parentRoute: typeof AppRouteRoute
     }
   }
@@ -171,17 +269,35 @@ declare module '@tanstack/react-router' {
 interface AppRouteRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
   AppExercisesLazyRoute: typeof AppExercisesLazyRoute
+  AppExerciseEditorRoute: typeof AppExerciseEditorRoute
   AppWalletsCreateRoute: typeof AppWalletsCreateRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
   AppExercisesLazyRoute: AppExercisesLazyRoute,
+  AppExerciseEditorRoute: AppExerciseEditorRoute,
   AppWalletsCreateRoute: AppWalletsCreateRoute,
 }
 
 const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
   AppRouteRouteChildren,
+)
+
+interface QuicksplitRouteRouteChildren {
+  QuicksplitCreateSharedWalletRoute: typeof QuicksplitCreateSharedWalletRoute
+  QuicksplitDashboardRoute: typeof QuicksplitDashboardRoute
+  QuicksplitWalletsWalletIdRoute: typeof QuicksplitWalletsWalletIdRoute
+}
+
+const QuicksplitRouteRouteChildren: QuicksplitRouteRouteChildren = {
+  QuicksplitCreateSharedWalletRoute: QuicksplitCreateSharedWalletRoute,
+  QuicksplitDashboardRoute: QuicksplitDashboardRoute,
+  QuicksplitWalletsWalletIdRoute: QuicksplitWalletsWalletIdRoute,
+}
+
+const QuicksplitRouteRouteWithChildren = QuicksplitRouteRoute._addFileChildren(
+  QuicksplitRouteRouteChildren,
 )
 
 interface PublicRouteChildren {
@@ -199,6 +315,7 @@ const PublicRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   AppRouteRoute: AppRouteRouteWithChildren,
+  QuicksplitRouteRoute: QuicksplitRouteRouteWithChildren,
   PublicRoute: PublicRouteWithChildren,
 }
 export const routeTree = rootRouteImport

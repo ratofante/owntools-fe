@@ -184,6 +184,7 @@ export function ExerciseTable({
         open={openExerciseSheet}
         onOpenChange={setOpenExerciseSheet}
         exercise={exercise}
+        fromRoute="/app/exercises"
       />
     </>
   )

@@ -12,10 +12,12 @@ export function MuscleGroupsMultipleSelect({
   className,
   values,
   onValuesChange,
+  disabledValues,
 }: {
   className?: string
   values: Array<string>
   onValuesChange: (values: Array<string>) => void
+  disabledValues?: Array<string>
 }) {
   const { data, isLoading } = useGetMuscleGroups()
   const muscleGroups = data?.data || []
@@ -34,6 +36,7 @@ export function MuscleGroupsMultipleSelect({
             <MultiSelectItem
               key={muscleGroup.id}
               value={muscleGroup.id.toString()}
+              disabled={disabledValues?.includes(muscleGroup.id.toString())}
             >
               {muscleGroup.name}
             </MultiSelectItem>

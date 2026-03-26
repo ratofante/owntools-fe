@@ -1,5 +1,5 @@
 import { Link, useNavigate, useRouterState } from '@tanstack/react-router'
-import { Dumbbell, LayoutDashboard, LogOut } from 'lucide-react'
+import { Coins, Dumbbell, LayoutDashboard, LogOut } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -28,6 +28,12 @@ const items = {
       title: 'Exercises',
       url: '/app/exercises',
       icon: Dumbbell,
+      disabled: false,
+    },
+    {
+      title: 'Quicksplit',
+      url: '/quicksplit/dashboard',
+      icon: Coins,
       disabled: false,
     },
   ],
@@ -76,7 +82,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <div>User</div>
+        <div>{auth.user?.fullName}</div>
         <Button variant="outline" onClick={handleLogout}>
           <LogOut />
           Logout

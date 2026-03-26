@@ -7,7 +7,8 @@ import {
 import { AppSidebar } from '@/components/app-sidebar'
 import { Separator } from '@/components/ui/separator'
 
-export const Route = createFileRoute('/app')({
+export const Route = createFileRoute('/quicksplit')({
+  component: RouteComponent,
   beforeLoad: ({ context, location }) => {
     if (!context.auth.getState().isAuthenticated) {
       throw redirect({
@@ -18,10 +19,9 @@ export const Route = createFileRoute('/app')({
       })
     }
   },
-  component: AppLayout,
 })
 
-function AppLayout() {
+function RouteComponent() {
   return (
     <SidebarProvider>
       <AppSidebar />

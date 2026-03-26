@@ -4,7 +4,7 @@ import { MuscleGroupSchema } from './muscle-groups'
 
 export const ExerciseSchema = z.object({
   id: z.number(),
-  name: z.string(),
+  name: z.string().min(3).max(50),
   description: z.string().nullable(),
   videoUrl: z.string().nullable(),
   createdAt: z.string(),
@@ -21,5 +21,8 @@ export const CreateExerciseSchema = ExerciseSchema.omit({
 })
 export type CreateExerciseType = z.infer<typeof CreateExerciseSchema>
 
-export const UpdateExerciseSchema = CreateExerciseSchema.partial()
+export const UpdateExerciseSchema = ExerciseSchema.omit({
+  createdAt: true,
+  updatedAt: true,
+})
 export type UpdateExerciseType = z.infer<typeof UpdateExerciseSchema>

@@ -1,4 +1,5 @@
-import { Link, Outlet, createFileRoute } from '@tanstack/react-router'
+import { Outlet, createFileRoute } from '@tanstack/react-router'
+import { Header } from '@/components/header'
 
 export const Route = createFileRoute('/_public')({
   component: RouteComponent,
@@ -9,22 +10,11 @@ export const Route = createFileRoute('/_public')({
 
 function RouteComponent() {
   return (
-    <div>
-      <header>
-        <ol className="list-disc list-inside px-2">
-          <li>
-            <Link to="/" className="text-blue-500 hover:opacity-75">
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link to="/login" className="text-blue-500 hover:opacity-75">
-              Login
-            </Link>
-          </li>
-        </ol>
-      </header>
-      <Outlet />
+    <div className="min-h-screen w-full bg-muted">
+      <Header />
+      <main className="container px-4 max-w-5xl mx-auto pt-28">
+        <Outlet />
+      </main>
     </div>
   )
 }

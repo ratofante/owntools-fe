@@ -1,13 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
+import type { UserType } from '@/types'
+
 import { apiFetch } from '@/lib/api-client'
 
 export interface FindUsersResponse {
-  message: string
-  results: Array<{
-    id: string
-    email: string
-    username: string
-  }>
+  users: Array<UserType>
 }
 
 export const useFindUsers = (search?: string | null) => {
@@ -20,7 +17,7 @@ export const useFindUsers = (search?: string | null) => {
 
 async function findUsers(search: string) {
   try {
-    const response = await apiFetch(`/api/users/search?input=${search}`, {
+    const response = await apiFetch(`/users/search?email=${search}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

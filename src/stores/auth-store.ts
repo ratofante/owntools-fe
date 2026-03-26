@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import type { UserType } from '@/types'
+import { apiFetch } from '@/lib/api-client'
 
 interface AuthStore {
   isAuthenticated: boolean
@@ -8,6 +9,7 @@ interface AuthStore {
   token: string | null
   login: (email: string, password: string) => Promise<void>
   logout: () => void
+  register: (email: string, password: string, fullName: string) => Promise<void>
   getAuthHeader: () => Record<string, string> | undefined
 }
 
@@ -39,6 +41,31 @@ export const useAuthStore = create<AuthStore>()(
       },
       logout: () => {
         set({ isAuthenticated: false, user: null, token: null })
+      },
+      register: async (email: string, password: string, fullName: string) => {
+        try {
+          const res = await apiFetch('/users/register', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password, fullName }),
+          })
+
+          if (!res.ok) {
+            throw new Error('Registration failed')
+          }
+
+          const data = await res.json()
+          set({
+            isAuthenticated: true,
+            user: data.user as UserType,
+            token: data.token.token,
+          })
+        } catch (error) {
+          console.error('Error registering user: ', error)
+          throw error
+        }
       },
       getAuthHeader: () => {
         const token = get().token

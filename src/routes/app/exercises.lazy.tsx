@@ -1,5 +1,5 @@
-import { createLazyFileRoute } from '@tanstack/react-router'
-import { FunnelX, SearchIcon } from 'lucide-react'
+import { Link, createLazyFileRoute } from '@tanstack/react-router'
+import { FunnelX, PlusIcon, SearchIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useGetExercisesPaginated } from '@/hooks/use-exercises'
 import { useDebounce } from '@/hooks/use-debounce'
@@ -10,7 +10,6 @@ import { Input } from '@/components/ui/input'
 import { BodyZonesMultipleSelect } from '@/components/body-zones/body-zones-multiple-select'
 import { MuscleGroupsMultipleSelect } from '@/components/muscle-groups/muscle-groups-multiple-select'
 import { Button } from '@/components/ui/button'
-import { AddExercise } from '@/components/exercises/add-exercise'
 
 export const Route = createLazyFileRoute('/app/exercises')({
   component: RouteComponent,
@@ -41,8 +40,6 @@ function RouteComponent() {
   })
   const exercises = data?.data || []
 
-  console.log(data)
-
   const debouncedSearchName = useDebounce(search, 500)
 
   useEffect(() => {
@@ -63,7 +60,16 @@ function RouteComponent() {
     <div className="flex-1 flex flex-col @container">
       <div className="flex items-center gap-2">
         <h1 className="text-2xl font-bold mr-auto">Exercises</h1>
-        <AddExercise />
+        <Button
+          asChild
+          variant="link"
+          onClick={() => useExercisesTableStore.setState({ exercise: null })}
+        >
+          <Link to="/app/exercise/editor">
+            <PlusIcon size={4} />
+            Add Exercise
+          </Link>
+        </Button>
       </div>
       <div className="flex-1">
         <div className="flex items-center gap-2">

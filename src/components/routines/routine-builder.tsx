@@ -101,7 +101,7 @@ export function RoutineBuilder({ user }: { user: UserType }) {
             }}
           />
 
-          {routine && (
+          {/* {routine && (
             <RoutineView routine={routine}>
               <DragDropProvider onDragEnd={handleDragEnd}>
                 <div className="space-y-2">
@@ -119,7 +119,7 @@ export function RoutineBuilder({ user }: { user: UserType }) {
                 </div>
               </DragDropProvider>
             </RoutineView>
-          )}
+          )} */}
         </div>
 
         <div className="@2xl:col-start-2 @2xl:row-start-1">
