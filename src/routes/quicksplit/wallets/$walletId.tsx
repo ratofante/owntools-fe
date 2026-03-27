@@ -22,11 +22,11 @@ function RouteComponent() {
   const expenses = data ?? []
 
   return (
-    <div className="space-y-6">
+    <div>
       {isLoading && <div>Loading...</div>}
       {isError && <div>Error loading wallet</div>}
       {wallet && (
-        <div>
+        <div className="space-y-6">
           <div className="flex items-center gap-4">
             <AppGoBackButton to="/quicksplit/dashboard" />
             <h2 className="section-title">{wallet.name}</h2>
@@ -35,6 +35,7 @@ function RouteComponent() {
                 className="ml-auto"
                 userId={auth.user.id}
                 wallet={wallet}
+                disabled={isExpensesLoading || isExpensesError}
               />
             )}
           </div>

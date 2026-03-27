@@ -36,11 +36,14 @@ export function AddExpense({
   className,
   userId,
   wallet,
+  disabled = false,
 }: {
   className?: string
   userId: number
   wallet: WalletType
+  disabled?: boolean
 }) {
+  const [open, setOpen] = useState(false)
   const [amountDisplay, setAmountDisplay] = useState('')
   const [shareDisplays, setShareDisplays] = useState<Array<string>>(() =>
     wallet.users.map(() => ''),
@@ -79,14 +82,26 @@ export function AddExpense({
       const result = ExpenseSchema.safeParse(payload)
       if (result.success) {
         console.log('adding expense: ', result.data)
-        await addExpense(result.data)
+        await addExpense(result.data, {
+          onSuccess: () => {
+            setOpen(false)
+            form.reset()
+            setAmountDisplay('')
+            setShareDisplays(wallet.users.map(() => ''))
+          },
+        })
       }
     },
   })
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant="default" size="sm" className={className}>
+        <Button
+          variant="default"
+          size="sm"
+          className={className}
+          disabled={disabled}
+        >
           <Plus size={16} />
           Expense
         </Button>

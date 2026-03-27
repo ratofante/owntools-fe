@@ -3,8 +3,10 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import { EllipsisVertical, Pen, Trash } from 'lucide-react'
 import type { ColumnDef } from '@tanstack/react-table'
 import type { ExpenseType } from '@/types'
+import { useDeleteExpense } from '@/hooks/use-expenses'
 import {
   Table,
   TableBody,
@@ -15,6 +17,14 @@ import {
 } from '@/components/ui/table'
 import { getInitials } from '@/lib/utils'
 import { CurrencyDisplay } from '@/components/currency-display'
+import { Button } from '@/components/ui/button'
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 
 const expenseColumns: Array<ColumnDef<ExpenseType>> = [
   {
@@ -81,6 +91,48 @@ const expenseColumns: Array<ColumnDef<ExpenseType>> = [
               <CurrencyDisplay amount={share.shareAmountCents / 100} />
             </span>
           ))}
+        </div>
+      )
+    },
+  },
+  {
+    accessorKey: 'actions',
+    header: () => {
+      return <div className="flex justify-end w-full">Actions</div>
+    },
+    cell: ({ row }) => {
+      const { mutateAsync: deleteExpense, isPending: isDeletingExpense } =
+        useDeleteExpense(row.original.walletId, row.original.id)
+
+      async function handleDelete() {
+        await deleteExpense(undefined, {
+          onSuccess: () => {
+            console.log('deleted expense: ', row.original.id)
+          },
+        })
+      }
+
+      return (
+        <div className="flex justify-end w-full">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                disabled={isDeletingExpense}
+              >
+                <EllipsisVertical size={16} />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent side="left" align="start">
+              <DropdownMenuItem>
+                <Pen size={16} /> Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleDelete}>
+                <Trash size={16} /> Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       )
     },
