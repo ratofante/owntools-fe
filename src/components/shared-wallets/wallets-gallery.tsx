@@ -1,8 +1,16 @@
 import { Link } from '@tanstack/react-router'
 
-import { EyeIcon, PlusIcon, UserRound, UserStar } from 'lucide-react'
-import type { WalletType, WalletUserType } from '@/types'
+import {
+  BellIcon,
+  EyeIcon,
+  PlusIcon,
+  RefreshCwIcon,
+  UserRound,
+  UserStar,
+} from 'lucide-react'
+import { getWalletStatus, isOwner } from '@/lib/wallets-utils'
 import { useGetWallets } from '@/hooks/use-wallets'
+import { cn } from '@/lib/utils'
 import {
   Card,
   CardAction,
@@ -18,12 +26,6 @@ interface WalletsGalleryProps {
 
 export function WalletsGallery({ userId }: WalletsGalleryProps) {
   const { data: wallets, isLoading, isError } = useGetWallets()
-
-  function isOwner(wallet: WalletType) {
-    return wallet.users.some(
-      (user: WalletUserType) => user.id === userId && user.role === 'owner',
-    )
-  }
 
   return (
     <div className="space-y-3">
@@ -46,7 +48,7 @@ export function WalletsGallery({ userId }: WalletsGalleryProps) {
               <CardHeader>
                 <CardTitle>
                   <div className="flex gap-1.5 items-center">
-                    {isOwner(wallet) ? (
+                    {isOwner(wallet, userId) ? (
                       <UserStar size={16} className="text-primary" />
                     ) : (
                       <UserRound size={16} className="text-secondary" />
@@ -56,12 +58,46 @@ export function WalletsGallery({ userId }: WalletsGalleryProps) {
                 </CardTitle>
                 <CardDescription>Soon..</CardDescription>
                 <CardAction>
-                  <Button variant="outline" asChild>
-                    <Link to="/quicksplit/wallets/$walletId" params={{ walletId: String(wallet.id) }}>
-                      <EyeIcon className="h-4 w-4" />
-                      View
-                    </Link>
-                  </Button>
+                  {(() => {
+                    const walletStatus = getWalletStatus(wallet, userId)
+                    const statusConfig = {
+                      pending: {
+                        label: 'New',
+                        icon: <BellIcon className="h-4 w-4" />,
+                        variant: 'default',
+                        className: '',
+                      },
+                      active: {
+                        label: 'View',
+                        icon: <EyeIcon className="h-4 w-4" />,
+                        variant: 'outline',
+                        className: '',
+                      },
+                      inactive: {
+                        label: 'Re-activate',
+                        icon: <RefreshCwIcon className="h-4 w-4" />,
+                        variant: 'secondary',
+                        className: '',
+                      },
+                    } as const
+                    const config =
+                      statusConfig[walletStatus as keyof typeof statusConfig]
+                    return (
+                      <Button
+                        variant={config.variant}
+                        asChild
+                        className={config.className}
+                      >
+                        <Link
+                          to="/quicksplit/wallets/$walletId"
+                          params={{ walletId: String(wallet.id) }}
+                        >
+                          {config.icon}
+                          {config.label}
+                        </Link>
+                      </Button>
+                    )
+                  })()}
                 </CardAction>
               </CardHeader>
             </Card>

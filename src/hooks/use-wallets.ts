@@ -1,5 +1,5 @@
-import { useQuery } from '@tanstack/react-query'
-import type { WalletType } from '@/types'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import type { CreateExpenseType, WalletType } from '@/types'
 import { apiFetch } from '@/lib/api-client'
 
 export const useGetWallets = () => {

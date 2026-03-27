@@ -25,3 +25,12 @@ export function formatWeight(weight: string | number, unit?: TargetWeightUnit) {
   const value = parseFloat(String(weight))
   return `${value} ${unit ?? ''}`
 }
+
+export function getInitials(fullName: string) {
+  return fullName
+    .split(' ')
+    .slice(0, 2)
+    .map((n) => n[0])
+    .join('')
+    .toUpperCase()
+}
